@@ -1,10 +1,10 @@
 import logging
-import git
 import os
 
 from .fetch_repo import fetch_repo
 from .clone_repo import clone_repo
 from .add_destination_remote import add_destination_remote
+from .push_origin_destination import push_origin_destination
 
 _logger = logging.getLogger(__name__)
 
@@ -32,5 +32,7 @@ def sync_repo(
         clone_repo(repo_sync_path, repo_source_url)
 
     add_destination_remote(repo_sync_path, repo_destination_url)
+
+    push_origin_destination(repo_sync_path)
 
     return 0
