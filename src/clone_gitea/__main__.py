@@ -2,59 +2,35 @@ import logging
 import os
 import sys
 from typing import Optional, Tuple
+from pprint import pformat
 
+from .arguments import process_arguments
 from .sync_repo import sync_repo
 
-_logger = logging.getLogger(__name__)
 
-_dir = os.path.dirname(__file__)
-
-_sync_path = os.path.abspath(os.path.join(_dir, "temp"))
-
-_source_url = "ssh://git@gitea.girgis.xyz:32822"
-_dest_url = "ssh://git@gitea.girgis.xyz:32822"
-
-_repos = {
-    "aero-app": (
-        "fullstack",
-        "web-client",
-        "web-middleware",
-        "devops",
-        "evaluation",
-        "protos",
-    ),
-    "finance-simulations": (),
-    "girgis-local": (),
-    "girgis-phd": (),
-    "idiscoveryinc": (),
-    "legacy-aero": (),
-    "legacy-aero-ti": (),
-    "legacy-aero-vb": (),
-    "legacy-jobs": (),
-    "legacy-vb": (),
-    "reactjs": (),
-    "rust-by-example": (),
-    "rust-infrastructure": (),
-    "rust-tests": (),
-    "selfcloudme": (),
-    "the-rust-prog-lang": (),
-    "tube-recorder": (),
-}
-
-
-def main(args: Optional[Tuple[str, ...]] = None) -> int:
+def main(args: Optional[Tuple[str, ...]] = None) -> None:
+    p_args = process_arguments(args=args)
 
     logging.basicConfig(level=logging.INFO)
 
-    _logger.info("using sync path %s", _sync_path)
+    logger = logging.getLogger(__name__)
 
-    for org, repos in _repos.items():
+    logger.info("System paths:\n%s", pformat(os.environ["PATH"].split(":"), indent=2))
+    logger.info("Python paths:\n%s", pformat(sys.path, indent=2))
+    logger.info(p_args.get_arguments_summary())
+
+    logger.info("using sync path %s", p_args.sync_path)
+
+    for org, repos in p_args.repos.items():
         for repo in repos:
-            if sync_repo(org, repo) != 0:
-                return 1
-
-    return 0
+            sync_repo(
+                sync_path=p_args.sync_path,
+                source_url=p_args.source_url,
+                destination_url=p_args.destination_url,
+                org=org,
+                repo=repo,
+            )
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    main()
