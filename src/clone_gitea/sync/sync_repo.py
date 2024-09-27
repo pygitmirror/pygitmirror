@@ -2,24 +2,11 @@ import logging
 import git
 import os
 
+from .fetch_repo import fetch_repo
+from .clone_repo import clone_repo
+from .add_destination_remote import add_destination_remote
+
 _logger = logging.getLogger(__name__)
-
-
-def _clone_repo(
-    sync_path: str,
-    source_url: str,
-) -> None:
-    _logger.info(
-        "cloning new repo from %s to %s",
-        source_url,
-        sync_path,
-    )
-
-    git.Repo.clone_from(source_url, sync_path)
-
-
-def _fetch_repo() -> None:
-    _logger.info("fetching existing repo")
 
 
 def sync_repo(
@@ -40,8 +27,10 @@ def sync_repo(
     _logger.info("repo_destination_url: %s", repo_destination_url)
 
     if os.path.isdir(repo_sync_path):
-        _fetch_repo()
+        fetch_repo(repo_sync_path)
     else:
-        _clone_repo(repo_sync_path, repo_source_url)
+        clone_repo(repo_sync_path, repo_source_url)
+
+    add_destination_remote(repo_sync_path, repo_destination_url)
 
     return 0

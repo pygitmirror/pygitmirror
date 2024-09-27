@@ -5,7 +5,7 @@ from typing import Optional, Tuple
 from pprint import pformat
 
 from .arguments import process_arguments
-from .sync_repo import sync_repo
+from .sync import sync_repo
 
 
 def main(args: Optional[Tuple[str, ...]] = None) -> None:
@@ -15,8 +15,20 @@ def main(args: Optional[Tuple[str, ...]] = None) -> None:
 
     logger = logging.getLogger(__name__)
 
-    logger.info("System paths:\n%s", pformat(os.environ["PATH"].split(":"), indent=2))
-    logger.info("Python paths:\n%s", pformat(sys.path, indent=2))
+    logger.info(
+        "System paths:\n%s",
+        pformat(
+            os.environ["PATH"].split(":"),
+            indent=2,
+        ),
+    )
+    logger.info(
+        "Python paths:\n%s",
+        pformat(
+            sys.path,
+            indent=2,
+        ),
+    )
     logger.info(p_args.get_arguments_summary())
 
     logger.info("using sync path %s", p_args.sync_path)
