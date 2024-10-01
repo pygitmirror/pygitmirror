@@ -28,11 +28,10 @@ dependencies = ["GitPython"]
 dynamic = ["version"]
 
 [project.urls]
-#Homepage = ""
-#Documentation = ""
-#Repository = ".git"
-#Issues = "/issues"
-#Changelog = "/blob/master/doc/ChangeLog"
+Homepage = "https://github.com/pygitmirror/pygitmirror"
+Documentation = "https://github.com/pygitmirror/pygitmirror"
+Repository = "https://github.com/pygitmirror/pygitmirror.git"
+Issues = "https://github.com/pygitmirror/pygitmirror/issues"
 
 [project.scripts]
 git-mirror = "pygitmirror.__main__:main"
