@@ -1,6 +1,6 @@
 import logging
 import git
-
+import subprocess
 from .constants import DESTINATION_NAME, ORIGIN_NAME
 
 _logger = logging.getLogger(__name__)
@@ -34,8 +34,31 @@ def push_origin_destination(
         if branch.remote_head == "HEAD":
             continue
 
-        _logger.info("%s", branch.name)
+        _logger.info("%s", branch.remote_head)
 
-        origin.pull(f"{branch.remote_head}:{branch.remote_head}")
+        git.checkout(branch.remote_head)
+        # args = [
+        #     "git",
+        #     "checkout",
+        #     branch.remote_head,
+        # ]
+        # subprocess.check_call(
+        #     args,
+        #     cwd=sync_path,
+        # )
 
-        destination.push(f"{branch.remote_head}:{branch.remote_head}")
+    # origin.pull(f"{branch.remote_head}:{branch.remote_head}")
+
+    # destination.push(f"{branch.remote_head}:{branch.remote_head}")
+
+    args = [
+        "git",
+        "push",
+        DESTINATION_NAME,
+        "--all",
+    ]
+    _logger.info(" ".join(args))
+    subprocess.check_call(
+        args,
+        cwd=sync_path,
+    )

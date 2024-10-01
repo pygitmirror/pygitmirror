@@ -12,20 +12,20 @@ or
 
 ### Build The Virtual Environment
 
-The current earliest Python version supported is `3.8`. You need to be able to create a virtual environment at this version to make sure any changes you make is compatible.
+The current earliest Python version supported is `3.11`. You need to be able to create a virtual environment at this version to make sure any changes you make is compatible.
 
 If you are using `conda`:
 
-    conda create --prefix=.venv python=3.8 --yes
+    conda create --prefix=.venv python=3.11 --yes
 
 If you are using `venv`, make sure you have the right base package:
 
     >> python --version
-    Python 3.8.x
+    Python 3.11.x
 
 Once you verify your base Python, you can then create a virtual environment using:
 
-    virtualenv -p py3.8 .venv
+    virtualenv -p py3.11 .venv
 
 ### Setup
 
