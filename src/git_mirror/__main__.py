@@ -8,7 +8,7 @@ from .arguments import process_arguments
 from .sync import sync_repo
 
 
-def main(args: Optional[Tuple[str, ...]] = None) -> None:
+def main(args: Optional[Tuple[str, ...]] = None) -> int:
     p_args = process_arguments(args=args)
 
     logging.basicConfig(level=logging.INFO)
@@ -43,6 +43,8 @@ def main(args: Optional[Tuple[str, ...]] = None) -> None:
                 repo=repo,
             )
 
+    return 0
+
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

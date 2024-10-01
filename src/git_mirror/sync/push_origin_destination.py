@@ -36,16 +36,15 @@ def push_origin_destination(
 
         _logger.info("%s", branch.remote_head)
 
-        git.checkout(branch.remote_head)
-        # args = [
-        #     "git",
-        #     "checkout",
-        #     branch.remote_head,
-        # ]
-        # subprocess.check_call(
-        #     args,
-        #     cwd=sync_path,
-        # )
+        args = [
+            "git",
+            "checkout",
+            branch.remote_head,
+        ]
+        subprocess.check_call(
+            args,
+            cwd=sync_path,
+        )
 
     # origin.pull(f"{branch.remote_head}:{branch.remote_head}")
 

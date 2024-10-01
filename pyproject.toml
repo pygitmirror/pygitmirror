@@ -3,7 +3,7 @@ requires = ["setuptools", "setuptools-scm", "setuptools-git-versioning"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "clone_gitea"
+name = "git_mirror"
 authors = [{ name = "Bassem Girgis", email = "brgirgis@gmail.com" }]
 maintainers = [{ name = "Bassem Girgis", email = "brgirgis@gmail.com" }]
 description = "An executable to clone git repos from one gitea instance to another."
@@ -35,7 +35,7 @@ dynamic = ["version"]
 #Changelog = "/blob/master/doc/ChangeLog"
 
 [project.scripts]
-clone_gitea = "clone_gitea.__main__:main"
+git_mirror = "git_mirror.__main__:main"
 
 [project.optional-dependencies]
 dev = ["build", "flake8", "mypy", "pytest", "twine"]
