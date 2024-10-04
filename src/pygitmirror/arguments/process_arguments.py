@@ -10,7 +10,7 @@ def process_arguments(args: Optional[Tuple[str, ...]] = None) -> Arguments:
 
     parser.add_argument(
         "--log",
-        default="INFO",
+        default="DEBUG",
         choices=("DEBUG", "INFO", "WARNING", "CRITICAL"),
         help="log level (default: %(default)s)",
     )
