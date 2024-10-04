@@ -8,7 +8,7 @@ authors = [{ name = "Bassem Girgis", email = "brgirgis@gmail.com" }]
 maintainers = [{ name = "Bassem Girgis", email = "brgirgis@gmail.com" }]
 description = "An executable to clone git repos from one gitea instance to another."
 readme = { file = "README.md", content-type = "text/markdown" }
-requires-python = ">=3.11"
+requires-python = ">=3.9"
 keywords = ["git", "clone", "gitea"]
 license = { text = "BSD" }
 classifiers = [
