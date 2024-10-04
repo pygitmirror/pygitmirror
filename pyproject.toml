@@ -17,7 +17,7 @@ classifiers = [
   'Environment :: Console',
 
   'Operating System :: Microsoft :: Windows',
-  'Operating System :: POSIX :: LINUX',
+  'Operating System :: POSIX :: Linux',
   'Operating System :: MacOS',
 
   'License :: OSI Approved :: MIT License',
