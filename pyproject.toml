@@ -6,11 +6,11 @@ build-backend = "setuptools.build_meta"
 name = "pygitmirror"
 authors = [{ name = "Bassem Girgis", email = "brgirgis@gmail.com" }]
 maintainers = [{ name = "Bassem Girgis", email = "brgirgis@gmail.com" }]
-description = "An executable to clone git repos from one gitea instance to another."
+description = "An executable to clone git repos from one git server to another."
 readme = { file = "README.md", content-type = "text/markdown" }
 requires-python = ">=3.9"
-keywords = ["git", "clone", "gitea"]
-license = { text = "BSD" }
+keywords = ["git", "clone", "gitea", "github", "gitlab", "mirror", "server"]
+license = { text = "MIT" }
 classifiers = [
   'Development Status :: 5 - Production/Stable',
 
