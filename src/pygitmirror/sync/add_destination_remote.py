@@ -20,8 +20,8 @@ def add_destination_remote(
             break
 
     if destination is not None:
-        _logger.info(f"{DESTINATION_NAME} remote is already defined")
+        _logger.info("%s remote is already defined", DESTINATION_NAME)
         return
 
-    _logger.info(f"adding remote {DESTINATION_NAME}")
+    _logger.info("adding remote %s", DESTINATION_NAME)
     repo.create_remote(DESTINATION_NAME, destination_url)

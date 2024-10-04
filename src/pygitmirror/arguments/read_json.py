@@ -4,7 +4,7 @@ import json
 
 
 def read_json(file_path: str) -> Any:
-    with open(file_path) as f:
+    with open(file_path, encoding="utf-8") as f:
         lines = f.readlines()
 
     active_lines = []

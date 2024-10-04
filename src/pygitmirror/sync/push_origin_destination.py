@@ -1,7 +1,10 @@
 import logging
-import git
 import subprocess
+
+import git
+
 from .constants import DESTINATION_NAME, ORIGIN_NAME
+from .get_reference_by_name import get_reference_by_name
 
 _logger = logging.getLogger(__name__)
 
@@ -12,20 +15,12 @@ def push_origin_destination(
 
     repo = git.Repo(sync_path)
 
-    origin = None
-    for remote in repo.remotes:
-        if remote.name == ORIGIN_NAME:
-            origin = remote
-            break
+    origin = get_reference_by_name(repo, ORIGIN_NAME)
 
     if origin is None:
         raise RuntimeError(f"{ORIGIN_NAME} remote does not exist")
 
-    destination = None
-    for remote in repo.remotes:
-        if remote.name == DESTINATION_NAME:
-            destination = remote
-            break
+    destination = get_reference_by_name(repo, DESTINATION_NAME)
 
     if destination is None:
         raise RuntimeError(f"{DESTINATION_NAME} remote does not exist")
