@@ -56,6 +56,21 @@
 .row-text { grid-column: 1 / -1; color: var(--muted); font-size: 1.4rem; overflow-wrap: anywhere; }
 .rows li.is-failed .row-text { color: var(--danger); }
 
+.row-details { grid-column: 1 / -1; font-size: 1.3rem; color: var(--muted); }
+.row-details summary { cursor: pointer; width: fit-content; }
+.row-details summary:hover { color: var(--fg); }
+.row-details pre {
+  margin: 8px 0 0;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--bg);
+  font-family: var(--font-mono);
+  font-size: 1.2rem;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
 /* The state of a row, in the color of what happened. */
 .pill {
   display: inline-flex;

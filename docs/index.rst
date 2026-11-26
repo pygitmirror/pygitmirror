@@ -1,7 +1,7 @@
 pygitmirror
 ===========
 
-|tests| |docs| |pypi| |pyversions| |license|
+|tests| |docs| |pypi| |pyversions| |weekly| |monthly| |total| |license|
 
 .. |tests| image:: https://github.com/pygitmirror/pygitmirror/actions/workflows/tests.yml/badge.svg
     :target: https://github.com/pygitmirror/pygitmirror/actions/workflows/tests.yml
@@ -18,6 +18,18 @@ pygitmirror
 .. |pyversions| image:: https://img.shields.io/pypi/pyversions/pygitmirror
     :target: https://pypi.org/project/pygitmirror/
     :alt: Python versions
+
+.. |weekly| image:: https://img.shields.io/pypi/dw/pygitmirror?label=downloads%2Fweek
+    :target: https://pypistats.org/packages/pygitmirror
+    :alt: Weekly downloads
+
+.. |monthly| image:: https://img.shields.io/pypi/dm/pygitmirror?label=downloads%2Fmonth
+    :target: https://pypistats.org/packages/pygitmirror
+    :alt: Monthly downloads
+
+.. |total| image:: https://img.shields.io/pepy/dt/pygitmirror?label=total%20downloads
+    :target: https://pepy.tech/projects/pygitmirror
+    :alt: Total downloads
 
 .. |license| image:: https://img.shields.io/pypi/l/pygitmirror
     :target: https://github.com/pygitmirror/pygitmirror/blob/master/LICENSE

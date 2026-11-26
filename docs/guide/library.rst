@@ -82,6 +82,11 @@ failure does not stop the others; it is in the ``error`` of its result.
 Results as data, and the local mirrors
 --------------------------------------
 
+A result which failed has ``result.error``, the exception, and
+``result.advice``: a sentence which says what went wrong and what to do,
+for the failures which are common, such as a repository which does not
+exist or a token which is refused.
+
 ``result.to_dict()`` gives a result as plain data, ready to be stored or
 sent as JSON. ``mirror.forget("my-org/api")`` deletes the local mirror of a
 repository to free its disk space; the next operation downloads it again.

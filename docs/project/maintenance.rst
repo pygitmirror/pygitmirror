@@ -42,6 +42,9 @@ git
   simply be moved forward.
 * ``GIT_ALLOW_PROTOCOL`` **applies to local paths**, as the ``file``
   protocol. The tests use local paths, so they need ``file`` allowed.
+* **git translates its messages.** ``Git`` sets ``LANGUAGE=en`` and
+  ``LC_MESSAGES=C``, since the advice for failures is chosen by what git
+  says. What a server says comes as the server wrote it.
 * **git marks its object files read-only**, and Windows refuses to delete
   a read-only file. ``remove_tree`` makes such a file writable first.
   Deleting with errors ignored left the local mirrors in place on
@@ -63,6 +66,10 @@ The standard library
 The page
 --------
 
+* **The pictures of the page** in ``docs/_static`` (``page-*.png``) were
+  taken by hand in this way, at a width of 1280, in both themes, after a
+  preview between two Gitea servers with a few repositories. Take them
+  again when the look of the page changes.
 * **To look at the page without a screen**, run a headless browser in a
   container (``chromedp/headless-shell``, with its debugging port
   published) and drive it over its debugging protocol: set the width and

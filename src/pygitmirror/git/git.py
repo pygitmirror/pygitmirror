@@ -43,6 +43,10 @@ class Git:
         """Return the environment of a command, with its configuration."""
         env = dict(os.environ)
         env["GIT_TERMINAL_PROMPT"] = "0"
+        # Messages in English, whatever the language of the user: failures
+        # are recognized by what git says.
+        env["LC_MESSAGES"] = "C"
+        env["LANGUAGE"] = "en"
         env["GIT_ALLOW_PROTOCOL"] = ":".join(self._allowed_protocols)
         env.setdefault("GIT_SSH_COMMAND", "ssh -o BatchMode=yes")
         # Configuration in the environment, which git reads as if it were

@@ -117,6 +117,10 @@ whether to delete, and whether to verify and archive.
 
 A dry run stops before every step which changes a host.
 
+When a step fails, the error says what git or the server said.
+``mirror/_advice.py`` turns the common ones into a sentence about what to
+do, which a result carries as its ``advice``.
+
 The steps are ordered so that an operation which fails leaves both hosts
 usable, and can be run again: nothing is deleted before everything was
 added, and the source is archived only after the copy was verified.
