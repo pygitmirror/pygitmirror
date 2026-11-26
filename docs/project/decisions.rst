@@ -25,9 +25,12 @@ The package
 **Python 3.11 and newer.**
    Python 3.10 reached its end of life in October 2026.
 
-**One class per module, and files under 300 lines.**
-   A host, the plan, the result: each is found by its name. Exceptions are
-   the exception: they have no behavior and share ``errors.py``.
+**One class per module, and no file over 300 lines.**
+   A host, the plan, the result: each is found by its name, and each file
+   can be read in one sitting. The limit holds for every file which is
+   written by hand, documentation and style sheets included. Exceptions
+   are the exception to the first rule: they have no behavior and share
+   ``errors.py``.
 
 The operations
 --------------
@@ -122,6 +125,51 @@ The command line
    ``<owner>/<name>`` and checked out every branch. A working tree is not
    needed to push, and checking out is the slowest part for a large
    repository. The old folders are not used anymore and can be deleted.
+
+The page
+--------
+
+**A page served by the package, not a separate application.**
+   One thing to install and one image to run. The alternative, a web
+   service with accounts, needs stored tokens, users and operations of
+   its own, and is a different product.
+
+**The server and the page use no framework.**
+   The server is ``http.server`` of the standard library; the page is
+   plain HTML, CSS and JavaScript modules. A web framework and a
+   JavaScript toolchain would each bring dependencies to keep current,
+   for a dozen routes and one page. The price is doing the checks of
+   ``_security.py`` by hand, each with a test.
+
+**An access key in the link, as notebooks do.**
+   Other programs and users of the machine can reach a local port. The
+   key keeps them out without making the user choose a password.
+
+**One job at a time.**
+   Two jobs could fetch into the same local mirror at once. Until the
+   mirror has a lock, the page refuses a second job.
+
+**The page offers a host only once it is verified.**
+   The library has classes for four services, tested against stand-ins.
+   The page started with Gitea, GitLab and plain git servers, which were
+   run against real servers, and gains the others one by one. A page invites people who cannot read a traceback.
+
+**Port 47417.**
+   The usual ports of local servers, such as 3000, 8000 and 8080, belong
+   to whatever else the user is developing.
+
+**The image is bare Alpine plus three packages.**
+   Python, git and the SSH client are all it needs. An official Python
+   image would bring pip and a second copy of what Alpine has.
+
+**The page keeps its local copies in the cache folder of the user.**
+   The command uses the current folder, as it always did. A page is
+   started from anywhere, and would scatter folders where it was started.
+
+**Tokens are not stored.**
+   Typing a token for each job is a nuisance, and storing it needs
+   encryption with a key which must live somewhere. That decision comes
+   with scheduled syncs; see the :doc:`roadmap`.
 
 The hosts
 ---------

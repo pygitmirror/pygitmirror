@@ -1,0 +1,78 @@
+/* The design tokens: fonts, colors, radius. Every other style sheet uses
+   these variables and no color or font of its own. */
+
+@font-face { font-family: "IBM Plex Sans"; font-style: normal; font-weight: 400; font-display: swap; src: url(/static/ibm-plex-sans-latin-400-normal.woff2) format("woff2"); }
+@font-face { font-family: "IBM Plex Sans"; font-style: normal; font-weight: 500; font-display: swap; src: url(/static/ibm-plex-sans-latin-500-normal.woff2) format("woff2"); }
+@font-face { font-family: "IBM Plex Sans"; font-style: normal; font-weight: 600; font-display: swap; src: url(/static/ibm-plex-sans-latin-600-normal.woff2) format("woff2"); }
+@font-face { font-family: "IBM Plex Sans Condensed"; font-style: normal; font-weight: 600; font-display: swap; src: url(/static/ibm-plex-sans-condensed-latin-600-normal.woff2) format("woff2"); }
+@font-face { font-family: "IBM Plex Mono"; font-style: normal; font-weight: 400; font-display: swap; src: url(/static/ibm-plex-mono-latin-400-normal.woff2) format("woff2"); }
+@font-face { font-family: "IBM Plex Mono"; font-style: normal; font-weight: 500; font-display: swap; src: url(/static/ibm-plex-mono-latin-500-normal.woff2) format("woff2"); }
+
+/* Light. Also what a browser without a preference gets. */
+:root {
+  --bg: #f5f5fc;
+  --surface: #ffffff;
+  --surface-2: #eeeef8;
+  --fg: #14131f;
+  --muted: #5d5c74;
+  --line: #e1e0ee;
+  --accent: #d81b5a;
+  --accent-strong: #b0124a;
+  --accent-fill: #d81b5a;
+  --accent-ink: #ffffff;
+  --signal: #2b6a0b;
+  --danger: #b3261e;
+  --glow: rgba(94, 110, 250, 0.10);
+  /* The categorical colors: amber, indigo, magenta, green. */
+  --c1: #a87200;
+  --c2: #4553e6;
+  --c3: #d81b5a;
+  --c4: #3c8d10;
+  --radius: 14px;
+  --font-display: "IBM Plex Sans Condensed", "Arial Narrow", "Helvetica Neue", sans-serif;
+  --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+  color-scheme: light;
+}
+
+/* Dark: by preference of the system unless the light theme was chosen, and
+   by choice. The two blocks must stay equal. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-scheme="light"]) {
+    --bg: #12111c;
+    --surface: #1d1b2a;
+    --surface-2: #242433;
+    --fg: #f2f1f7;
+    --muted: #9c9bb3;
+    --line: #2c2b3f;
+    --accent: #f33777;
+    --accent-strong: #ff6198;
+    --signal: #5ada16;
+    --danger: #ff7a70;
+    --glow: rgba(129, 140, 255, 0.16);
+    --c1: #ffc12d;
+    --c2: #5e6efa;
+    --c3: #f33777;
+    --c4: #5ada16;
+    color-scheme: dark;
+  }
+}
+
+:root[data-scheme="dark"] {
+  --bg: #12111c;
+  --surface: #1d1b2a;
+  --surface-2: #242433;
+  --fg: #f2f1f7;
+  --muted: #9c9bb3;
+  --line: #2c2b3f;
+  --accent: #f33777;
+  --accent-strong: #ff6198;
+  --signal: #5ada16;
+  --danger: #ff7a70;
+  --glow: rgba(129, 140, 255, 0.16);
+  --c1: #ffc12d;
+  --c2: #5e6efa;
+  --c3: #f33777;
+  --c4: #5ada16;
+  color-scheme: dark;
+}

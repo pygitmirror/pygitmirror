@@ -116,7 +116,9 @@ ignore-decorators = ["pygitmirror._compat.override", "typing.override"]
 # Tests assert, run git on repositories they made and use made-up tokens.
 "tests/**" = ["D", "S"]
 "docs/conf.py" = ["D"]
-".github/scripts/*.py" = ["T20"]
+# The scripts of the workflows print, run docker with a temporary folder
+# inside the container, and ask a local port.
+".github/scripts/*.py" = ["T20", "S108", "S310", "S603", "S607"]
 
 
 [tool.mypy]

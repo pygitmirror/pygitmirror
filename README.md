@@ -6,7 +6,7 @@
 [![Python versions](https://img.shields.io/pypi/pyversions/pygitmirror)](https://pypi.org/project/pygitmirror/)
 [![License](https://img.shields.io/pypi/l/pygitmirror)](https://github.com/pygitmirror/pygitmirror/blob/master/LICENSE)
 
-Clone, sync and migrate git repositories between GitHub, GitLab, Gitea, Bitbucket and any other git server. A command, `git-mirror`, and a Python library.
+Clone, sync and migrate git repositories between GitHub, GitLab, Gitea, Bitbucket and any other git server. A command, `git-mirror`, a page which runs on your own machine, and a Python library.
 
 ```shell
 export GIT_MIRROR_SOURCE_TOKEN=...       # a GitHub token
@@ -24,6 +24,7 @@ git-mirror sync --source github \
 - **All branches and tags**, for one repository or every repository of an organization
 - **Cheap to repeat**: a repository which did not change costs two short requests and no download
 - **Careful with tokens**: read from the environment, never written to a file, a URL or a command line
+- **Runs locally**: your machine, your tokens; nothing is sent anywhere but to the two servers
 - **No dependencies**: needs Python 3.11 and git 2.31, nothing else
 - **Typed**: type hints throughout, checked with mypy in strict mode
 
@@ -61,6 +62,30 @@ git-mirror migrate --source bitbucket --destination github \
 ```
 
 Only branches and tags are copied: not issues, pull requests, wikis, releases or Git LFS files.
+
+## The page
+
+```shell
+git-mirror serve
+```
+
+prints a link to a page on your own machine: choose two servers, list the repositories, preview, and run. Or with Docker:
+
+```shell
+docker run -d --name git-mirror \
+    -p 127.0.0.1:47417:47417 \
+    -v git-mirror-data:/data \
+    --add-host host.docker.internal:host-gateway \
+    ghcr.io/pygitmirror/pygitmirror
+
+docker logs git-mirror    # shows the link to open
+```
+
+- A repository passes through a copy on your machine, so the volume needs room for the largest repository, or for all of them if the copies are kept to make the next sync fast.
+- Inside the container, a server on your machine is `host.docker.internal`, not `localhost`.
+- The page offers Gitea, Forgejo, GitLab and plain git servers for now; the command has all hosts.
+
+See [the guide to the page](https://pygitmirror.readthedocs.io/en/latest/guide/web.html).
 
 ## Hosts
 

@@ -80,6 +80,16 @@ class Mirror:
             (info.ref for info in self._source.list_repositories(owner)), key=lambda ref: ref.path
         )
 
+    def forget(self, repository: RepositoryRef | str) -> None:
+        """Delete the local mirror of a repository, to free its disk space.
+
+        The next operation on the repository downloads all of it again.
+
+        :param repository: the repository at the source
+        """
+        if self._workdir is not None:
+            self._mirror_of(_ref(repository)).delete()
+
     def clone(
         self,
         repository: RepositoryRef | str,
@@ -190,13 +200,16 @@ class Mirror:
                 _logger.debug("%s of %s failed", operation, source, exc_info=True)
                 yield MirrorResult(operation, source, self.destination_of(source), error=error)
 
+    def _mirror_of(self, repository: RepositoryRef) -> LocalMirror:
+        """Return the local mirror of a repository in the work folder."""
+        assert self._workdir is not None  # noqa: S101 - checked by the callers
+        return LocalMirror(self._workdir / repository.owner / f"{repository.name}.git", self._git)
+
     @contextmanager
     def _local_mirror(self, repository: RepositoryRef) -> Iterator[LocalMirror]:
         """Give the local mirror of a repository, temporary without a work folder."""
         if self._workdir is not None:
-            yield LocalMirror(
-                self._workdir / repository.owner / f"{repository.name}.git", self._git
-            )
+            yield self._mirror_of(repository)
             return
         with tempfile.TemporaryDirectory(
             prefix="git-mirror-", ignore_cleanup_errors=True

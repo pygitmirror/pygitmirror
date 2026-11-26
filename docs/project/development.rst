@@ -65,6 +65,17 @@ Run ``make`` without arguments to list the targets.
      - check that the built distributions have the version of a tag
    * - ``make publish``
      - upload the built distributions to PyPI
+   * - ``make serve``
+     - serve the page on this machine, on port 47427 so that the default
+       port stays free
+   * - ``make check-gitea``
+     - copy between two real Gitea servers in containers, with tokens
+   * - ``make docker-build``
+     - build the image of the page for this machine
+   * - ``make docker-check``
+     - check that the built image starts and is locked down
+   * - ``make docker-publish``
+     - build the image for both architectures and push it
    * - ``make clean``
      - remove build, test and cache artifacts
 
@@ -79,11 +90,13 @@ Layout
        mirror/     the operations, their plan and result
        config/     settings from a file and from options
        cli/        the git-mirror command
+       web/        the page: its server, its jobs, and static/ with its files
        errors.py   the exceptions
    tests/          the same layout, and helpers.py
    docs/           this documentation; scripts/ draws its diagrams
 
-:doc:`design` explains how the parts work together and how to add a host.
+:doc:`design` explains how the parts work together and how to add a host,
+:doc:`ui-design` how the page looks, and :doc:`security` what protects it.
 
 Code style
 ----------
@@ -91,7 +104,8 @@ Code style
 * American English in code, comments, documentation and commit messages.
 * One public class per module, named after it in snake case. Modules of
   helper functions start with an underscore.
-* Files stay under 300 lines; a test checks it for the package.
+* No file has more than 300 lines, whatever it holds; a test checks every
+  file which is written by hand.
 * ``ruff`` for lint and format, ``mypy`` in strict mode.
 * Every public module, class, method and function has a docstring with
   Sphinx field lists (``:param name:``, ``:returns:``, ``:raises Error:``).
@@ -113,8 +127,17 @@ The tests need no network and no account.
   whose repositories are folders, for testing the operations which create
   and archive.
 
+* **The page's server is called directly.** ``Client`` in
+  ``tests/web/conftest.py`` sends requests to ``WebApp.handle`` as the page
+  does. Every protection has a test which shows it refusing.
+
+* **One check uses real servers.** ``make check-gitea`` starts two Gitea
+  servers in containers and runs clone, sync and migrate between them with
+  tokens. It needs Docker and is not part of ``make check``.
+
 A change to a host should be tried against the real service as well; say
-in the pull request what was tried. :doc:`maintenance` has a script for it.
+in the pull request what was tried, and record it in :doc:`host-notes`.
+:doc:`maintenance` has a script for it.
 
 Versions and releases
 ---------------------
@@ -151,6 +174,9 @@ Continuous integration
      - runs ``ruff`` and ``mypy`` and builds the documentation
    * - ``CodeQL``
      - scans the Python code and the workflows for vulnerabilities
+   * - ``Docker``
+     - builds the image and checks that it runs, copies between two real
+       Gitea servers, and pushes the image at a release
    * - ``Publish``
      - uploads a release to PyPI
 

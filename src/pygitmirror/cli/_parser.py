@@ -1,9 +1,14 @@
 """The options of the command line."""
 
 from argparse import ArgumentParser
+from typing import Any
 
 from pygitmirror import PROVIDERS, __version__
 from pygitmirror.mirror import Operation
+from pygitmirror.web import DEFAULT_PORT
+
+#: The command which serves the page.
+SERVE = "serve"
 
 _HELP = {
     Operation.CLONE: "copy what the destination does not have, without overwriting anything",
@@ -82,10 +87,42 @@ def _common() -> ArgumentParser:
     return parser
 
 
+def _add_serve(commands: Any) -> None:
+    """Add the command which serves the page."""
+    text = "serve a page which runs the operations in a browser"
+    command = commands.add_parser(SERVE, help=text, description=text)
+    command.add_argument(
+        "--host",
+        default="127.0.0.1",
+        help="address to listen on (default: %(default)s, this machine only)",
+    )
+    command.add_argument(
+        "--port", type=int, default=DEFAULT_PORT, help="port to listen on (default: %(default)s)"
+    )
+    command.add_argument(
+        "--allow-host",
+        action="append",
+        default=[],
+        metavar="NAME",
+        help="host name the page may be reached under, besides localhost; repeatable",
+    )
+    command.add_argument(
+        "--sync-path",
+        metavar="FOLDER",
+        help="folder of the local mirrors (default: git-mirror in the cache folder of the user)",
+    )
+    command.add_argument(
+        "--log",
+        default="INFO",
+        choices=("DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"),
+        help="log level (default: %(default)s)",
+    )
+
+
 def build_parser() -> ArgumentParser:
     """Create the parser of the ``git-mirror`` command.
 
-    :returns: a parser with one command per operation
+    :returns: a parser with one command per operation, and one for the page
     """
     parser = ArgumentParser(
         prog="git-mirror",
@@ -113,4 +150,5 @@ def build_parser() -> ArgumentParser:
                 default=None,
                 help="make the source read-only once the copy is checked",
             )
+    _add_serve(commands)
     return parser

@@ -30,7 +30,7 @@ Run `make` to list all targets. A pull request should:
 - keep tokens out of files, URLs, command lines and logs
 - say which real services a change to a host was tried against
 - update the documentation in the same pull request, with an "Unreleased" entry in `docs/project/changelog.rst`
-- put every new class in its own module
+- put every new class in its own module, and keep every file under 300 lines
 
 The [design page](https://pygitmirror.readthedocs.io/en/latest/project/design.html) describes how the package is built and how to add a host, and the [development page](https://pygitmirror.readthedocs.io/en/latest/project/development.html) the layout, the code style and the tests.
 

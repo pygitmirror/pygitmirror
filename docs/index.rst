@@ -25,7 +25,8 @@ pygitmirror
 
 ``pygitmirror`` copies git repositories from one host to another: GitHub,
 GitLab, Gitea, Bitbucket, or any git server. It is a command, ``git-mirror``,
-and a Python library with the same abilities.
+a :doc:`page <guide/web>` which runs on your own machine, and a Python
+library with the same abilities.
 
 .. code-block:: bash
 
@@ -58,6 +59,9 @@ destination:
 All three create the destination repository when it is missing, with the
 description and the visibility of the source. See :doc:`guide/operations`.
 
+Only branches and tags are copied. Issues, pull requests, wikis and Git LFS
+files are not; the :doc:`project/roadmap` says when they come.
+
 The package has no dependencies: it runs the ``git`` executable and uses the
 standard library for the APIs of the hosts. Tokens are read from the
 environment and are never written to a file, a URL or a command line.
@@ -78,6 +82,7 @@ environment and are never written to a file, a URL or a command line.
    guide/operations
    guide/hosts
    guide/command-line
+   guide/web
    guide/library
 
 .. toctree::
@@ -91,6 +96,9 @@ environment and are never written to a file, a URL or a command line.
    :caption: Project
 
    project/design
+   project/ui-design
+   project/security
+   project/host-notes
    project/decisions
    project/roadmap
    project/changelog

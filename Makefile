@@ -3,7 +3,8 @@
 SOURCES := src tests docs .github/scripts
 
 .PHONY: help install install-test install-latest lint format typecheck test coverage check \
-	docs docs-live docs-images docs-clean version build check-release publish clean
+	docs docs-live docs-images docs-clean version build check-release publish clean \
+	serve check-gitea docker-build docker-check docker-publish
 
 help:  ## Show the available targets
 	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | \
@@ -62,6 +63,30 @@ check-release:  ## Check that the distributions have the version of a tag: TAG=v
 
 publish:  ## Upload the built distributions to PyPI
 	uv publish
+
+# Not the default port of the page, which is left to an installed copy.
+PORT ?= 47427
+
+serve:  ## Serve the page on this machine, on a port of its own: PORT=47427
+	uv run git-mirror serve --port $(PORT)
+
+check-gitea:  ## Copy between two real Gitea servers in containers, with tokens
+	uv run python .github/scripts/check_gitea.py
+
+# The image is named after the repository in the GitHub registry.
+IMAGE ?= ghcr.io/pygitmirror/pygitmirror
+IMAGE_VERSION = $(shell uvx --quiet --with hatch-vcs hatchling version)
+
+docker-build:  ## Build the image of the page for this machine
+	docker build --build-arg VERSION=$(IMAGE_VERSION) --tag $(IMAGE):dev .
+
+docker-check:  ## Check that the built image starts and is locked down
+	uv run --no-project python .github/scripts/check_image.py $(IMAGE):dev
+
+docker-publish:  ## Build the image for both architectures and push it
+	docker buildx build --platform linux/amd64,linux/arm64 \
+		--build-arg VERSION=$(IMAGE_VERSION) \
+		--tag $(IMAGE):$(IMAGE_VERSION) --tag $(IMAGE):latest --push .
 
 clean: docs-clean  ## Remove build, test and cache artifacts
 	rm -rf dist htmlcov coverage.xml .coverage .pytest_cache .mypy_cache .ruff_cache

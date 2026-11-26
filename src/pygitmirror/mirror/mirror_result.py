@@ -1,6 +1,7 @@
 """The outcome of an operation on one repository."""
 
 from dataclasses import dataclass, field
+from typing import Any
 
 from pygitmirror.errors import GitMirrorError
 from pygitmirror.mirror.mirror_plan import MirrorPlan
@@ -49,6 +50,27 @@ class MirrorResult:
         if self.dry_run or not self.ok:
             return False
         return bool(self.created or self.archived or self.plan.changes(prune=self.pruned))
+
+    def to_dict(self) -> dict[str, Any]:
+        """Return the result as plain data, for storing or sending it.
+
+        :returns: the fields of the result, with the repositories as
+            ``owner/name``, the error as its message and the summary
+        """
+        return {
+            "operation": self.operation.value,
+            "source": self.source.path,
+            "destination": self.destination.path,
+            "plan": self.plan.to_dict(),
+            "created": self.created,
+            "pruned": self.pruned,
+            "archived": self.archived,
+            "dry_run": self.dry_run,
+            "ok": self.ok,
+            "changed": self.changed,
+            "error": None if self.error is None else str(self.error),
+            "summary": self.summary(),
+        }
 
     def summary(self) -> str:
         """Describe the outcome in one line.

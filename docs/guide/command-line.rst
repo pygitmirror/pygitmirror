@@ -4,10 +4,12 @@ Command Line
 .. code-block:: text
 
    git-mirror {clone,sync,migrate} [options]
+   git-mirror serve [options]
 
-The command is the operation; see :doc:`operations`. ``git-mirror COMMAND
---help`` lists the options, which are the same for all three except where
-noted.
+The first three commands are the operations; see :doc:`operations`.
+``git-mirror COMMAND --help`` lists their options, which are the same for
+all three except where noted. ``serve`` runs the page and is described in
+:doc:`web`.
 
 Options
 -------

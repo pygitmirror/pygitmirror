@@ -135,4 +135,4 @@ Limits of the hosts
   hosts accept.
 
 Only the reading requests were tried against the public servers; see
-:doc:`/project/maintenance` for what was and was not verified.
+:doc:`/project/host-notes` for what was and was not verified, host by host.

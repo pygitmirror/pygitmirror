@@ -4,17 +4,33 @@ import logging
 import os
 import sys
 from collections.abc import Sequence
+from pathlib import Path
 
-from pygitmirror.cli._parser import build_parser
+from pygitmirror.cli._parser import SERVE, build_parser
 from pygitmirror.config import Settings, load_settings
 from pygitmirror.errors import GitMirrorError
 from pygitmirror.mirror import Mirror, Operation
 from pygitmirror.repository_ref import RepositoryRef
+from pygitmirror.web import WebApp, serve
 
 _logger = logging.getLogger("pygitmirror")
 
+#: The environment variable which fixes the access key of the page.
+KEY_VARIABLE = "GIT_MIRROR_KEY"
+
 #: Options which are answered without a command.
 _NO_COMMAND = ("-h", "--help", "--version")
+
+
+def cache_folder() -> Path:
+    """Return the folder in which the page keeps the local mirrors by default.
+
+    :returns: ``git-mirror`` in the cache folder of the user: the one named
+        by ``XDG_CACHE_HOME`` or, on Windows, ``LOCALAPPDATA``, and
+        ``~/.cache`` otherwise
+    """
+    base = os.environ.get("XDG_CACHE_HOME") or os.environ.get("LOCALAPPDATA")
+    return (Path(base) if base else Path.home() / ".cache") / "git-mirror"
 
 
 def _repositories(mirror: Mirror, settings: Settings) -> list[RepositoryRef]:
@@ -62,12 +78,22 @@ def main(argv: Sequence[str] | None = None) -> int:
         started
     """
     args = list(sys.argv[1:] if argv is None else argv)
-    operations = [operation.value for operation in Operation]
+    operations = [*(operation.value for operation in Operation), SERVE]
     # The first versions had no commands and did what clone does.
     if args and args[0] not in operations and args[0] not in _NO_COMMAND:
         args.insert(0, Operation.CLONE.value)
     options = vars(build_parser().parse_args(args))
     logging.basicConfig(level=options["log"], format="%(asctime)s %(levelname)-7s %(message)s")
+    if options["operation"] == SERVE:
+        folder = Path(options["sync_path"]).expanduser() if options["sync_path"] else cache_folder()
+        _logger.info("local copies are kept in %s", folder)
+        app = WebApp(
+            folder,
+            key=os.environ.get(KEY_VARIABLE) or None,
+            allowed_hosts=options["allow_host"],
+        )
+        serve(app, options["host"], options["port"])
+        return 0
     try:
         failed = _run(load_settings(Operation(options["operation"]), options))
     except GitMirrorError as error:
