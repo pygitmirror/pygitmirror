@@ -112,9 +112,7 @@ def layers(theme: str) -> str:
     """
     canvas = Canvas(880, 400, theme)
     canvas.box(60, 30, 330, 64, "cli + config", ["the git-mirror command and its settings"])
-    canvas.box(
-        490, 30, 330, 64, "web version", ["planned: accounts, schedules, a page"], dashed=True
-    )
+    canvas.box(490, 30, 330, 64, "web", ["the page, its server and its jobs"])
     canvas.rect(30, 132, 820, 240, "neutral", dashed=True, filled=False, radius=12)
     canvas.text(50, 156, "the library", "muted", size=12, anchor="start")
     canvas.box(
@@ -124,13 +122,13 @@ def layers(theme: str) -> str:
     canvas.box(490, 284, 330, 64, "git", ["the git executable and the local mirror"], "destination")
     canvas.line(225, 94, 225, 200)
     canvas.arrow(225, 200, 275, 200)
-    canvas.line(655, 94, 655, 200, dashed=True)
-    canvas.arrow(655, 200, 605, 200, dashed=True)
+    canvas.line(655, 94, 655, 200)
+    canvas.arrow(655, 200, 605, 200)
     canvas.arrow(360, 232, 360, 284)
     canvas.arrow(520, 232, 520, 284)
     canvas.text(440, 264, "uses", "muted", size=12)
     return canvas.render(
-        "The command and the planned web version use the mirror package, which uses "
+        "The command and the page use the mirror package, which uses "
         "the hosts and the git packages. Hosts and git do not use each other."
     )
 

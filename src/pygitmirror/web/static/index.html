@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+    <title>git-mirror</title>
+    <link rel="icon" href="/static/mark.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="/static/tokens.css">
+    <link rel="stylesheet" href="/static/base.css">
+    <link rel="stylesheet" href="/static/components.css">
+    <link rel="stylesheet" href="/static/results.css">
+    <script type="module" src="/static/app.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#servers">Skip to the form</a>
+    <header class="site-header">
+      <div class="wrap site-nav">
+        <a class="brand" href="/">
+          <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
+            <circle cx="5" cy="13" r="3.2" fill="currentColor"/>
+            <circle cx="21" cy="13" r="3.2" fill="none" stroke="currentColor" stroke-width="1.8"/>
+            <path d="M9.5 13h7M14 9.5l3.5 3.5-3.5 3.5" fill="none" stroke="currentColor"
+                  stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          git-mirror
+        </a>
+        <span class="label" id="version"></span>
+        <div class="theme-switch" role="group" aria-label="Color theme">
+          <button type="button" data-mode="auto" aria-label="Follow the system" title="System">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>
+          </button>
+          <button type="button" data-mode="light" aria-label="Light" title="Light">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M19 5l-1.5 1.5M6.5 17.5 5 19"/></svg>
+          </button>
+          <button type="button" data-mode="dark" aria-label="Dark" title="Dark">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z"/></svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="wrap hero-inner">
+          <div class="hero-copy">
+            <p class="label">Clone · Sync · Migrate</p>
+            <h1>Move repositories between git servers.</h1>
+            <p class="lede">Copy every branch and tag from one server to another. Preview first,
+              and nothing at the destination is overwritten unless you ask for it.</p>
+            <div class="cta">
+              <a class="btn primary" href="#servers">Start</a>
+              <a class="btn" href="#results">Results</a>
+            </div>
+          </div>
+          <div class="panel flow-panel">
+            <div class="panel-head">
+              <span class="panel-name" id="flow-name">idle</span>
+              <span class="metric" id="flow-metric">source → local mirror → destination</span>
+            </div>
+            <canvas id="flow" width="900" height="420" role="img"
+                    aria-label="Commits traveling from the source through the local mirror to the destination"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <section class="sec" id="servers">
+        <div class="wrap">
+          <div class="sec-head">
+            <p class="label">01 · Servers</p>
+            <h2>Where from, and where to</h2>
+            <p>A token is sent to its own server only. It is kept in memory while a job runs
+              and is never written to disk.</p>
+          </div>
+          <div class="pair">
+            <fieldset class="panel form" data-role="source">
+              <legend class="panel-head"><span class="panel-name">Source</span><span class="metric">read</span></legend>
+            </fieldset>
+            <fieldset class="panel form" data-role="destination">
+              <legend class="panel-head"><span class="panel-name">Destination</span><span class="metric">written</span></legend>
+            </fieldset>
+          </div>
+        </div>
+      </section>
+
+      <section class="sec" id="repositories">
+        <div class="wrap">
+          <div class="sec-head">
+            <p class="label">02 · Repositories</p>
+            <h2>What to copy</h2>
+            <p>Name the owner at the source, then list its repositories or type their names. An owner is
+              a user or an organization; on GitLab a group, such as <code>group/subgroup</code>.</p>
+          </div>
+          <div class="panel form">
+            <div class="fields three">
+              <label>Owner at the source
+                <input id="owner" type="text" autocomplete="off" spellcheck="false" placeholder="my-org">
+              </label>
+              <label>Owner at the destination
+                <input id="destination-owner" type="text" autocomplete="off" spellcheck="false" placeholder="same as the source">
+              </label>
+              <div class="actions"><button class="btn" type="button" id="list">List repositories</button></div>
+            </div>
+            <label>Repositories, one name per line
+              <textarea id="names" rows="5" spellcheck="false" placeholder="api&#10;web"></textarea>
+            </label>
+            <p class="hint" id="list-status" role="status"></p>
+          </div>
+        </div>
+      </section>
+
+      <section class="sec" id="operation">
+        <div class="wrap">
+          <div class="sec-head">
+            <p class="label">03 · Operation</p>
+            <h2>How much may change</h2>
+            <p>The three differ in what they may change at the destination.</p>
+          </div>
+          <div class="choices" role="radiogroup" aria-label="Operation">
+            <label class="choice" data-mark="c4">
+              <input type="radio" name="operation" value="clone" checked>
+              <span class="choice-name">clone</span>
+              <span class="choice-text">Adds what is missing and moves branches forward. Never overwrites or deletes.</span>
+            </label>
+            <label class="choice" data-mark="c1">
+              <input type="radio" name="operation" value="sync">
+              <span class="choice-name">sync</span>
+              <span class="choice-text">Makes the destination equal to the source. Overwrites what differs and deletes what the source lacks.</span>
+            </label>
+            <label class="choice" data-mark="c2">
+              <input type="radio" name="operation" value="migrate">
+              <span class="choice-name">migrate</span>
+              <span class="choice-text">Clones, then checks that the copy is complete. Can make the source read-only.</span>
+            </label>
+          </div>
+          <div class="options">
+            <label class="check" data-for="sync"><input type="checkbox" id="keep-extra"> Keep branches and tags which the source does not have</label>
+            <label class="check" data-for="migrate"><input type="checkbox" id="archive-source"> Archive the source once the copy is checked</label>
+          </div>
+          <div class="panel storage">
+            <div class="panel-head"><span class="panel-name">Local copies</span><span class="metric" id="storage-path"></span></div>
+            <div class="meter" id="storage-meter" role="img" aria-label="Disk space"><i id="storage-used"></i></div>
+            <p class="hint" id="storage-text">A repository passes through a copy on this machine. It needs as much free
+              space as the repository is large.</p>
+            <label class="check"><input type="checkbox" id="keep-copies" checked> Keep the copies, so that the next sync only downloads what is new</label>
+            <div class="cta"><button class="btn small" type="button" id="clear-copies">Delete the local copies</button></div>
+          </div>
+          <div class="cta">
+            <button class="btn" type="button" id="preview">Preview</button>
+            <button class="btn primary" type="button" id="run">Run</button>
+            <p class="hint" id="run-status" role="status"></p>
+          </div>
+        </div>
+      </section>
+
+      <section class="sec" id="results">
+        <div class="wrap">
+          <div class="sec-head">
+            <p class="label">04 · Results</p>
+            <h2 id="results-title">Nothing has run yet</h2>
+            <p id="results-note">A preview reads both servers and changes nothing.</p>
+          </div>
+          <ul class="figs" id="figures"></ul>
+          <ul class="rows" id="rows"></ul>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap">
+        <p>Branches and tags only: issues, pull requests, wikis and Git LFS files are not copied.</p>
+        <p>Runs on this machine. Nothing is sent anywhere but to the two servers.</p>
+      </div>
+    </footer>
+  </body>
+</html>

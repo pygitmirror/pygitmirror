@@ -1,0 +1,30 @@
+# Runs the page of git-mirror. Start it with
+#
+#     docker compose up -d && docker compose logs git-mirror
+#
+# and open the link which the log shows.
+services:
+  git-mirror:
+    image: ghcr.io/pygitmirror/pygitmirror:latest
+    # Reachable from this machine only.
+    ports:
+      - "127.0.0.1:47417:47417"
+    volumes:
+      # The local copies of the repositories. It needs room for the largest
+      # repository, or for all of them when the copies are kept.
+      - git-mirror-data:/data
+    # Lets the container reach a server which runs on this machine, under
+    # the name host.docker.internal.
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+
+volumes:
+  git-mirror-data:

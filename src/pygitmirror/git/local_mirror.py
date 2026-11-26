@@ -1,5 +1,6 @@
 """The local copy which data passes through on its way between two hosts."""
 
+import shutil
 from collections.abc import Mapping
 from pathlib import Path
 
@@ -32,6 +33,23 @@ class LocalMirror:
         """The folder of the repository."""
         return self._path
 
+    @staticmethod
+    def is_mirror(path: Path) -> bool:
+        """Tell whether a folder looks like a local mirror.
+
+        :param path: a folder
+        :returns: whether it is a bare git repository
+        """
+        return (path / "HEAD").is_file() and (path / "objects").is_dir()
+
+    def delete(self) -> None:
+        """Delete the repository from the disk, if it is one.
+
+        The next fetch downloads everything again.
+        """
+        if self.is_mirror(self._path):
+            shutil.rmtree(self._path, ignore_errors=True)
+
     def fetch(self, url: str, config: Mapping[str, str] | None = None) -> None:
         """Make the branches and tags equal to those of a repository.
 
@@ -42,7 +60,7 @@ class LocalMirror:
         :param config: the configuration which authenticates
         :raises GitError: if the repository cannot be read
         """
-        if not (self._path / "HEAD").is_file():
+        if not self.is_mirror(self._path):
             self._path.mkdir(parents=True, exist_ok=True)
             self._git.run("init", "--quiet", "--bare", str(self._path))
         refspecs = [f"+{refspec}" for refspec in _REFSPECS]

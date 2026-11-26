@@ -1,0 +1,7 @@
+# Only what the Dockerfile copies is sent to the build.
+*
+!pyproject.toml
+!README.md
+!LICENSE
+!src
+**/__pycache__

@@ -4,54 +4,11 @@ Maintenance Notes
 What was learned while building the package, written down so that it does
 not have to be learned again.
 
-What was verified against the real services
--------------------------------------------
+Trying a host
+-------------
 
-On 2026-11-25, without tokens, against public repositories:
-
-.. list-table::
-   :header-rows: 1
-   :widths: 22 26 26 26
-
-   * - Host
-     - Reading a repository
-     - Listing an owner
-     - git over HTTPS
-   * - github.com
-     - works
-     - works, organization and user
-     - works
-   * - gitlab.com
-     - works
-     - works, nested group
-     - works
-   * - gitea.com
-     - works
-     - works, over two pages
-     - works
-   * - bitbucket.org
-     - works
-     - the first page works; the second timed out
-     - works
-
-**Not verified against any real service:** everything which needs a token.
-That is authentication of the API and of git, creating a repository,
-changing the default branch, archiving, and listing private repositories.
-These are tested against stand-ins written from the documentation of the
-APIs. In particular:
-
-* Bitbucket: that a ``PUT`` with only ``mainbranch`` changes the default
-  branch and nothing else, and which user name each kind of token needs
-  for git.
-* Gitea: that ``/users/{name}/repos`` and ``/user/repos`` include private
-  repositories for the account of the token.
-* GitHub Enterprise Server and self-managed GitLab were not reached at
-  all; they should behave like the public servers under another address.
-
-Trying them is the first item of the :doc:`roadmap`. Update this section
-when it is done.
-
-To repeat the check, or to try a host with a token:
+What is known about each host, and what was verified against the real
+service, is in :doc:`host-notes`. To try a host, with or without a token:
 
 .. code-block:: python
 
@@ -98,6 +55,39 @@ The standard library
   which the client reports as an error.
 * ``logging.basicConfig(force=True)`` removes the handlers of the test
   runner. The command does not use it.
+
+The page
+--------
+
+* **To look at the page without a screen**, run a headless browser in a
+  container (``chromedp/headless-shell``, with its debugging port
+  published) and drive it over its debugging protocol: set the width and
+  the color scheme, open the page, and capture a screenshot. Its own
+  ``--screenshot`` option never returned, in a container and on macOS
+  alike. The browser reaches a page on the machine as
+  ``host.docker.internal``, which the page must be told to allow with
+  ``--allow-host``.
+* **Scripts and styles are served with** ``no-cache``. With a lifetime, a
+  browser kept running the scripts of the version before.
+* **Setting a style from a script is allowed** by the content policy;
+  a ``style`` attribute in the markup is not.
+* **The modules of the page import each other by relative name**, such as
+  ``./dom.js``, which the server serves from ``/static/``. A file in a
+  subfolder would not be served.
+* **The access key in a test is fixed**; in use it is random at each
+  start, which logs every browser out. ``GIT_MIRROR_KEY`` fixes it.
+
+The image
+---------
+
+* **It is about 65 MB of files**, half of them Python; Docker reports
+  about 100 MB.
+* **The version is given to the build as an argument**, since the git
+  tags are not in the build context.
+* **A version between releases has a plus sign**, which a tag of an image
+  cannot have. Only releases are pushed.
+* **Inside a container** ``localhost`` **is the container.** A server on
+  the machine is ``host.docker.internal``.
 
 The workflows
 -------------

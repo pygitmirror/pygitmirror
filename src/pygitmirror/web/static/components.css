@@ -1,0 +1,134 @@
+/* The parts a page is built from: panels, buttons, forms, choices. */
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 10px;
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+.panel-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  width: 100%;
+  padding-inline: 2px;
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.panel-name { color: var(--fg); font-weight: 500; display: inline-flex; align-items: center; gap: 6px; }
+.panel-name::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--dot, var(--muted)); }
+.panel-head .metric { overflow: hidden; text-overflow: ellipsis; }
+.panel canvas { display: block; width: 100%; aspect-ratio: 15 / 7; border-radius: 8px; background: var(--bg); }
+
+[data-role="source"] { --dot: var(--c2); }
+[data-role="destination"] { --dot: var(--c3); }
+.flow-panel { --dot: var(--muted); }
+.flow-panel.is-running { --dot: var(--signal); }
+.storage { --dot: var(--c1); margin-bottom: 24px; padding: 14px; gap: 12px; }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 11px 18px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--fg);
+  font: inherit;
+  font-weight: 500;
+  font-size: 1.5rem;
+  line-height: 1.2;
+  cursor: pointer;
+}
+.btn:hover { border-color: var(--muted); color: var(--fg); }
+.btn.primary { background: var(--accent-fill); border-color: var(--accent-fill); color: var(--accent-ink); }
+.btn.primary:hover { filter: brightness(1.08); color: var(--accent-ink); }
+.btn.small { padding: 7px 12px; font-size: 1.3rem; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; filter: none; }
+
+/* Forms. A fieldset is a panel whose legend is its head. */
+fieldset.panel { margin: 0; }
+fieldset.panel > legend { float: left; padding: 0 2px; }
+fieldset.panel > legend + * { clear: both; }
+.form { padding: 14px; gap: 14px; }
+.pair, .choices { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; }
+.fields { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; }
+.actions { display: flex; align-items: end; }
+
+label { display: grid; gap: 6px; font-size: 1.4rem; font-weight: 500; }
+input[type="text"], input[type="url"], input[type="password"], select, textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-mono);
+  font-size: 1.4rem;
+  line-height: 1.4;
+}
+textarea { resize: vertical; min-height: 96px; }
+input::placeholder, textarea::placeholder { color: var(--muted); opacity: 0.7; }
+input:hover, select:hover, textarea:hover { border-color: var(--muted); }
+.hint { margin: 0; font-size: 1.3rem; color: var(--muted); min-height: 1.3em; }
+.hint.is-error { color: var(--danger); }
+.hint.is-good { color: var(--signal); }
+[hidden] { display: none !important; }
+
+.check { display: flex; align-items: center; gap: 10px; font-weight: 400; font-size: 1.5rem; }
+.check input { width: 16px; height: 16px; accent-color: var(--accent-fill); }
+.options { display: grid; gap: 10px; margin-block: 20px 24px; min-height: 2.4rem; }
+
+/* The three operations: cards with a mark in the color of what they may do. */
+.choice {
+  position: relative;
+  display: grid;
+  gap: 8px;
+  align-content: start;
+  padding: 18px 16px 18px 22px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-weight: 400;
+}
+.choice::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 18px;
+  bottom: 18px;
+  width: 3px;
+  border-radius: 0 2px 2px 0;
+  background: var(--mark);
+}
+.choice[data-mark="c1"] { --mark: var(--c1); }
+.choice[data-mark="c2"] { --mark: var(--c2); }
+.choice[data-mark="c4"] { --mark: var(--c4); }
+.choice input { position: absolute; opacity: 0; }
+.choice:hover { border-color: var(--muted); }
+.choice:has(input:checked) { border-color: var(--mark); box-shadow: 0 0 0 1px var(--mark); }
+.choice:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 3px; }
+.choice-name { font-family: var(--font-mono); font-weight: 500; font-size: 1.8rem; }
+.choice-text { color: var(--muted); font-size: 1.4rem; line-height: 1.45; }
+
+/* How full the disk of the local copies is. */
+.meter { height: 10px; border-radius: 2px; background: var(--surface-2); overflow: hidden; }
+.meter i { display: block; height: 100%; width: 0; border-radius: 2px; background: var(--c1); }
+.meter.is-low i { background: var(--danger); }
+
+@media (min-width: 768px) {
+  .pair { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .choices { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .fields.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .fields.three { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto; }
+}

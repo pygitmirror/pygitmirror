@@ -42,6 +42,15 @@ Errors
 
    pygitmirror.errors
 
+The page
+--------
+
+.. autosummary::
+   :toctree: api
+   :template: autosummary/module.rst
+
+   pygitmirror.web
+
 Command line
 ------------
 

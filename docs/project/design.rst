@@ -23,16 +23,16 @@ knows the hosts and no git, and a third combines them into the operations.
 .. image:: /_static/layers-light.svg
    :class: only-light
    :width: 100%
-   :alt: The command and the planned web version use the mirror package, which uses the hosts and the git packages
+   :alt: The command and the page use the mirror package, which uses the hosts and the git packages
 
 .. image:: /_static/layers-dark.svg
    :class: only-dark
    :width: 100%
-   :alt: The command and the planned web version use the mirror package, which uses the hosts and the git packages
+   :alt: The command and the page use the mirror package, which uses the hosts and the git packages
 
-Dependencies go one way, as the arrows point. ``config`` and ``cli`` use the
-library and are used by nothing. ``hosts`` and ``git`` do not
-import each other, and neither imports ``mirror``.
+Dependencies go one way, as the arrows point. The command and the page use
+the library and are used by nothing. ``hosts`` and ``git`` do not import
+each other, and neither imports ``mirror``.
 
 The layers
 ----------
@@ -63,9 +63,13 @@ The layers
    * - ``pygitmirror.cli``
      - The ``git-mirror`` command: parses, runs, reports, sets the exit
        status.
+   * - ``pygitmirror.web``
+     - The page: a small HTTP server, the files of the page, and jobs
+       which run operations in the background.
 
-The library is ``git``, ``hosts`` and ``mirror``. ``config`` and ``cli``
-are one user of it; the web version will be another, and needs neither.
+The library is ``git``, ``hosts`` and ``mirror``. The command, with
+``config`` and ``cli``, is one user of it and the page, ``web``, is
+another. Neither adds an ability: what they do, the library does.
 
 How an operation runs
 ---------------------
@@ -195,23 +199,54 @@ A host is one module in ``pygitmirror/hosts`` with one class:
 Nothing else changes: the operations and the command find the host by its
 provider name.
 
-What the web version builds on
-------------------------------
+The page
+--------
 
-The web version is a program which calls the library for its users. The
-library was shaped for it:
+``git-mirror serve`` starts an HTTP server from the standard library which
+serves a page and a small JSON API to it. The page is plain HTML, CSS and
+JavaScript modules: no framework and no build step, so the package still
+has no dependencies and the image stays small.
 
-* **An operation is a function call with a result.** ``MirrorResult`` says
-  what was created, updated and deleted; errors are exceptions of one
-  family. Nothing has to be read from a log.
+.. list-table::
+   :header-rows: 1
+   :widths: 26 74
+
+   * - Module
+     - Responsibility
+   * - ``web_app.py``
+     - ``WebApp.handle`` turns a ``Request`` into a ``Response``. It
+       checks every request and passes it to its route. It knows nothing
+       of sockets, which is what lets the tests call it directly.
+   * - ``_security.py``
+     - The access key, the checks against other sites and other host
+       names, and the headers of every response.
+   * - ``_forms.py``
+     - Reads and validates what the page sends, and decides which
+       providers the page offers.
+   * - ``job.py``, ``job_registry.py``
+     - A job runs ``Mirror.run`` in a thread and collects each result as
+       it arrives; the registry starts one job at a time.
+   * - ``_storage.py``
+     - Measures and deletes the local mirrors.
+   * - ``_static.py``
+     - Reads the files of the page once and serves them by name.
+   * - ``_server.py``
+     - Connects ``WebApp`` to the HTTP server.
+
+The page asks for the state of a job every 0.7 seconds while it runs.
+``Mirror.run`` yields the result of each repository when it is ready, and
+``MirrorResult.to_dict`` turns it into what is sent.
+
+What the page looks like is in :doc:`ui-design`, and what protects it in
+:doc:`security`.
+
+The library was shaped to be driven like this:
+
+* **An operation is a function call with a result**, and errors are
+  exceptions of one family. Nothing has to be read from a log.
 * **A preview exists.** ``dry_run`` returns the same result without
-  changing anything, which a page can show before the user confirms.
-* **Many repositories report one by one.** ``Mirror.run`` yields each
-  result when it is ready, which is what a progress display needs.
+  changing anything.
 * **Nothing is global.** Hosts and mirrors are objects; tokens are
-  arguments. One process can work for many accounts at once.
-* **Keeping in sync is repeating a cheap call.** A scheduler calls
-  ``sync`` again; an unchanged repository costs two listings.
-
-What it still needs, and the library does not have yet, is listed in the
-:doc:`roadmap`.
+  arguments.
+* **Keeping in sync is repeating a cheap call**: an unchanged repository
+  costs two listings.

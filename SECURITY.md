@@ -1,14 +1,17 @@
 # Security policy
 
-`pygitmirror` handles access tokens for git hosts, runs the `git` executable and sends requests to the APIs of the hosts it is told to use.
+`pygitmirror` handles access tokens for git hosts, runs the `git` executable, sends requests to the APIs of the hosts it is told to use, and can serve a page on the local machine. [The security page](https://pygitmirror.readthedocs.io/en/latest/project/security.html) of the documentation describes what it defends against and how.
 
 A vulnerability is, for example:
 
 - a token which reaches a file, a URL, a command line, a log or a server other than the one it belongs to
 - a repository name, URL or setting which makes the package run a command, or read or write outside the folder of its local mirrors
 - an operation which changes or deletes more than its documentation says
+- a way to use the page without its access key, from another site, or under another host name
 
-The package gives git the transports `https`, `http`, `ssh`, `git` and `file` by default. A service which takes addresses from its users must restrict them, as the [library guide](https://pygitmirror.readthedocs.io/en/latest/guide/library.html) describes; that local folders can be read with the default is intended.
+The package gives git the transports `https`, `http`, `ssh`, `git` and `file` by default. A service which takes addresses from its users must restrict them, as the [library guide](https://pygitmirror.readthedocs.io/en/latest/guide/library.html) describes; that local folders can be read with the default is intended. The page restricts them itself.
+
+The page is for one user on one machine. That it is served over plain HTTP, has a single key and should not be exposed to a network is intended and documented.
 
 ## Supported versions
 

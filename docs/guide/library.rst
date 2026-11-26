@@ -79,6 +79,13 @@ failure does not stop the others; it is in the ``error`` of its result.
        elif result.changed:
            print(result.summary())
 
+Results as data, and the local mirrors
+--------------------------------------
+
+``result.to_dict()`` gives a result as plain data, ready to be stored or
+sent as JSON. ``mirror.forget("my-org/api")`` deletes the local mirror of a
+repository to free its disk space; the next operation downloads it again.
+
 Errors
 ------
 
@@ -125,6 +132,10 @@ The library is written to be driven by a long-running program:
 Two calls must not use the same local mirror at the same time: give
 concurrent jobs for the same repository different ``workdir`` folders, or
 run them one after the other.
+
+The page of the package, :doc:`web`, is such a program, in
+``pygitmirror.web``. ``WebApp`` can be served by another HTTP server
+through its ``handle`` method.
 
 Logging
 -------

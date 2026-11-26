@@ -1,0 +1,85 @@
+/* The results of a job: figures on top, one row per repository below. */
+
+.figs {
+  list-style: none;
+  margin: 0 0 24px;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.figs li {
+  position: relative;
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 18px 16px 18px 22px;
+  display: grid;
+  gap: 8px;
+  align-content: start;
+}
+.figs li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 18px;
+  bottom: 18px;
+  width: 3px;
+  border-radius: 0 2px 2px 0;
+  background: var(--mark, var(--accent));
+}
+.figs li[data-mark="c1"] { --mark: var(--c1); }
+.figs li[data-mark="c2"] { --mark: var(--c2); }
+.figs li[data-mark="c3"] { --mark: var(--c3); }
+.figs li[data-mark="c4"] { --mark: var(--c4); }
+.figs li[data-mark="muted"] { --mark: var(--muted); }
+.num {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 3.2rem;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.cap { font-size: 1.4rem; line-height: 1.45; color: var(--muted); }
+
+.rows { list-style: none; margin: 0; padding: 0; border-bottom: 1px solid var(--line); }
+.rows:empty { border: 0; }
+.rows li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 4px 24px;
+  align-items: baseline;
+  padding-block: 14px;
+  border-top: 1px solid var(--line);
+}
+.row-name { font-family: var(--font-mono); font-size: 1.4rem; font-weight: 500; overflow-wrap: anywhere; }
+.row-name .to { color: var(--muted); font-weight: 400; }
+.row-text { grid-column: 1 / -1; color: var(--muted); font-size: 1.4rem; overflow-wrap: anywhere; }
+.rows li.is-failed .row-text { color: var(--danger); }
+
+/* The state of a row, in the color of what happened. */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 10px;
+  border: 1px solid var(--tone, var(--line));
+  border-radius: 999px;
+  color: var(--tone, var(--muted));
+  font-family: var(--font-mono);
+  font-size: 1.2rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.pill::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.pill[data-tone="good"] { --tone: var(--signal); }
+.pill[data-tone="warn"] { --tone: var(--c1); }
+.pill[data-tone="stop"] { --tone: var(--danger); }
+.pill[data-tone="wait"]::before { animation: pulse 1.2s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity: 0.25; } }
+
+@media (min-width: 768px) {
+  .figs { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pill[data-tone="wait"]::before { animation: none; }
+}

@@ -9,6 +9,12 @@ updates:
       actions:
         patterns: ["*"]
 
+  # The base image of the Dockerfile.
+  - package-ecosystem: docker
+    directory: /
+    schedule:
+      interval: monthly
+
   # Locked development dependencies in uv.lock.
   - package-ecosystem: uv
     directory: /

@@ -2,7 +2,7 @@
 
 from collections.abc import Mapping
 from dataclasses import dataclass
-from typing import Self
+from typing import Any, Self
 
 
 @dataclass(frozen=True)
@@ -38,6 +38,19 @@ class MirrorPlan:
             delete=tuple(sorted(destination.keys() - source.keys())),
             unchanged=len(shared) - len(update),
         )
+
+    def to_dict(self) -> dict[str, Any]:
+        """Return the plan as plain data, for storing or sending it.
+
+        :returns: the references to create, update and delete as lists, and
+            the number which are unchanged
+        """
+        return {
+            "create": list(self.create),
+            "update": list(self.update),
+            "delete": list(self.delete),
+            "unchanged": self.unchanged,
+        }
 
     def changes(self, *, prune: bool) -> int:
         """Count the references which an operation would change.
