@@ -1,0 +1,37 @@
+name: Bug report
+description: Something does not work as documented
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What you expected, and what happened instead.
+    validations:
+      required: true
+  - type: textarea
+    id: command
+    attributes:
+      label: Command or code to reproduce
+      description: >-
+        The git-mirror command with its output at --log DEBUG, or a short piece of code.
+        Remove tokens and private addresses first.
+      render: shell
+    validations:
+      required: true
+  - type: input
+    id: hosts
+    attributes:
+      label: Hosts
+      description: The services of the source and the destination, and the version of a server you run yourself.
+      placeholder: github.com to Gitea 1.24
+    validations:
+      required: true
+  - type: input
+    id: versions
+    attributes:
+      label: Versions
+      description: Versions of pygitmirror, Python and git, and the operating system.
+      placeholder: pygitmirror 0.1.0, Python 3.13, git 2.50, Ubuntu 24.04
+    validations:
+      required: true

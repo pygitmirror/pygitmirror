@@ -1,4 +1,32 @@
 {
-  "python.defaultInterpreterPath": "python3",
-  "cSpell.words": ["pygitmirror", "pytest", "venv", "virtualenv"]
+  "cSpell.words": [
+    "Bitbucket",
+    "extraheader",
+    "Forgejo",
+    "Gitea",
+    "pygitmirror",
+    "pytest",
+    "refspec",
+    "venv"
+  ],
+  "editor.formatOnSave": true,
+  "files.exclude": {
+    "**/__pycache__": true
+  },
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true,
+  "files.trimTrailingWhitespace": true,
+  "[python]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.ruff": "explicit",
+      "source.organizeImports.ruff": "explicit"
+    }
+  },
+  "python.testing.pytestArgs": ["tests"],
+  "python.testing.unittestEnabled": false,
+  "python.testing.pytestEnabled": true,
+  "mypy-type-checker.importStrategy": "fromEnvironment",
+  "ruff.importStrategy": "fromEnvironment"
 }

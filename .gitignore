@@ -161,5 +161,12 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
-**/*temp*
-**/*Temp*
+# Scratch files and folders at the root
+/*temp*
+/*Temp*
+
+# Generated API reference
+docs/reference/api/
+
+# Local mirrors made while trying the tool
+/mirrors/

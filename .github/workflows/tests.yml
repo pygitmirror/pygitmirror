@@ -1,0 +1,92 @@
+name: Tests
+
+on:
+  pull_request:
+    branches: [master]
+  schedule:
+    # Daily on master, to notice new releases of Python, git or the
+    # development tools which break the tests.
+    - cron: "23 3 * * *"
+  # Allows a run by hand from the Actions tab.
+  workflow_dispatch:
+
+# The jobs only read the repository.
+permissions:
+  contents: read
+
+# A new commit on a pull request replaces the runs of the previous one, which
+# would otherwise wait for runners ahead of it. Runs on master are kept.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  run-tests:
+    name: Run tests on ${{ matrix.os }} with Python ${{ matrix.python-version }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: ["3.11", "3.12", "3.13", "3.14"]
+      fail-fast: false
+
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+
+    # make runs its commands with the shell it finds, so use bash on every
+    # system, Windows included.
+    defaults:
+      run:
+        shell: bash
+
+    env:
+      # Run in the environment which make install-test created, without
+      # adding the other development tools to it.
+      UV_NO_SYNC: "1"
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: make install-test
+
+      - name: Run the tests
+        run: make coverage
+
+  # The other jobs install the versions of uv.lock, which only change once a
+  # month. This one installs the newest release of every development tool,
+  # so a release which breaks the tests shows within a day.
+  run-tests-with-latest-dependencies:
+    name: Run tests with the latest dependencies
+    if: github.event_name != 'pull_request'
+
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    env:
+      UV_NO_SYNC: "1"
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.14"
+
+      - name: Install the newest versions of the dependencies
+        run: make install-latest
+
+      - name: Show the installed versions
+        run: uv pip list
+
+      - name: Run the tests
+        run: make coverage

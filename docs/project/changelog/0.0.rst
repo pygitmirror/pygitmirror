@@ -1,0 +1,14 @@
+0.0
+===
+
+0.0.2 (2024-10-04)
+------------------
+
+* Fixed the classifiers of the release.
+* Documentation improvements.
+
+0.0.1
+-----
+
+* The first release: ``git-mirror`` clones repositories from one git
+  server and pushes all their branches to another.
