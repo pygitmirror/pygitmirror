@@ -55,6 +55,8 @@ Run ``make`` without arguments to list the targets.
      - build this documentation, treating warnings as errors
    * - ``make docs-live``
      - serve the documentation and rebuild it on changes
+   * - ``make docs-images``
+     - regenerate the diagrams shown in the documentation
    * - ``make version``
      - show the version derived from the git tags
    * - ``make build``
@@ -79,7 +81,7 @@ Layout
        cli/        the git-mirror command
        errors.py   the exceptions
    tests/          the same layout, and helpers.py
-   docs/           this documentation
+   docs/           this documentation; scripts/ draws its diagrams
 
 :doc:`design` explains how the parts work together and how to add a host.
 

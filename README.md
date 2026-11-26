@@ -17,6 +17,8 @@ git-mirror sync --source github \
     --org my-org --all
 ```
 
+![The source is fetched into a local mirror, which is pushed to the destination](https://raw.githubusercontent.com/pygitmirror/pygitmirror/master/docs/_static/overview-light.svg)
+
 - **Three operations**: `clone` only adds, `sync` makes the destination equal to the source, `migrate` clones, verifies and can archive the source
 - **Creates what is missing**: destination repositories are created with the description and visibility of the source
 - **All branches and tags**, for one repository or every repository of an organization

@@ -13,7 +13,20 @@ of what they do:
 3. The source is fetched into a local mirror, which is pushed to the
    destination.
 
-They differ in what they may change at the destination:
+They differ in what they may change at the destination. For a branch or a
+tag, there are four cases:
+
+.. image:: /_static/operations-light.svg
+   :class: only-light
+   :width: 100%
+   :alt: What clone, sync and migrate do to a branch or tag which only the source has, which is ahead at the source, which differs, and which only the destination has
+
+.. image:: /_static/operations-dark.svg
+   :class: only-dark
+   :width: 100%
+   :alt: What clone, sync and migrate do to a branch or tag which only the source has, which is ahead at the source, which differs, and which only the destination has
+
+In full:
 
 .. list-table::
    :header-rows: 1

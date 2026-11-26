@@ -20,13 +20,18 @@ nothing in common.
 The package keeps the two apart. One part knows git and no host, one part
 knows the hosts and no git, and a third combines them into the operations.
 
-.. code-block:: text
+.. image:: /_static/layers-light.svg
+   :class: only-light
+   :width: 100%
+   :alt: The command and the planned web version use the mirror package, which uses the hosts and the git packages
 
-   cli  ──►  config ──►  mirror  ──►  hosts   (where a repository is, and its API)
-                            │
-                            └─────►  git     (the git executable, a local mirror)
+.. image:: /_static/layers-dark.svg
+   :class: only-dark
+   :width: 100%
+   :alt: The command and the planned web version use the mirror package, which uses the hosts and the git packages
 
-Dependencies go one way, as the arrows point. ``hosts`` and ``git`` do not
+Dependencies go one way, as the arrows point. ``config`` and ``cli`` use the
+library and are used by nothing. ``hosts`` and ``git`` do not
 import each other, and neither imports ``mirror``.
 
 The layers
@@ -68,6 +73,16 @@ How an operation runs
 All three operations are one sequence of steps, in
 ``pygitmirror.mirror._transfer``, with three switches: whether to overwrite,
 whether to delete, and whether to verify and archive.
+
+.. image:: /_static/steps-light.svg
+   :class: only-light
+   :width: 100%
+   :alt: The eleven steps of an operation, and which of clone, sync and migrate takes each
+
+.. image:: /_static/steps-dark.svg
+   :class: only-dark
+   :width: 100%
+   :alt: The eleven steps of an operation, and which of clone, sync and migrate takes each
 
 1. **List the source.** ``git ls-remote`` gives the branches and tags of
    the source and what they point to. This also proves that the source

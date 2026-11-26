@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 400" width="880" height="400" role="img">
+<title>The command and the planned web version use the mirror package, which uses the hosts and the git packages. Hosts and git do not use each other.</title>
+<rect x="0.75" y="0.75" width="878.5" height="398.5" rx="12" fill="#131416" stroke="#30363d" stroke-width="1.5"/>
+<rect x="60" y="30" width="330" height="64" rx="8" fill="#1c2128" stroke="#545d68" stroke-width="1.5"/>
+<text x="225.0" y="58.0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" text-anchor="middle" fill="#e6edf3">cli + config</text>
+<text x="225.0" y="78.0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" font-weight="400" text-anchor="middle" fill="#9198a1">the git-mirror command and its settings</text>
+<rect x="490" y="30" width="330" height="64" rx="8" fill="#1c2128" stroke="#545d68" stroke-width="1.5" stroke-dasharray="5 4"/>
+<text x="655.0" y="58.0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" text-anchor="middle" fill="#e6edf3">web version</text>
+<text x="655.0" y="78.0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" font-weight="400" text-anchor="middle" fill="#9198a1">planned: accounts, schedules, a page</text>
+<rect x="30" y="132" width="820" height="240" rx="12" fill="none" stroke="#545d68" stroke-width="1.5" stroke-dasharray="5 4"/>
+<text x="50" y="156" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" font-weight="400" text-anchor="start" fill="#9198a1">the library</text>
+<rect x="275" y="168" width="330" height="64" rx="8" fill="#12261e" stroke="#3fb950" stroke-width="1.5"/>
+<text x="440.0" y="196.0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" text-anchor="middle" fill="#e6edf3">mirror</text>
+<text x="440.0" y="216.0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" font-weight="400" text-anchor="middle" fill="#9198a1">clone, sync, migrate: the plan and the result</text>
+<rect x="60" y="284" width="330" height="64" rx="8" fill="#121d2f" stroke="#4493f8" stroke-width="1.5"/>
+<text x="225.0" y="312.0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" text-anchor="middle" fill="#e6edf3">hosts</text>
+<text x="225.0" y="332.0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" font-weight="400" text-anchor="middle" fill="#9198a1">one class per service, and the API client</text>
+<rect x="490" y="284" width="330" height="64" rx="8" fill="#211a33" stroke="#ab7df8" stroke-width="1.5"/>
+<text x="655.0" y="312.0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" text-anchor="middle" fill="#e6edf3">git</text>
+<text x="655.0" y="332.0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" font-weight="400" text-anchor="middle" fill="#9198a1">the git executable and the local mirror</text>
+<line x1="225" y1="94" x2="225" y2="200" stroke="#9198a1" stroke-width="1.5"/>
+<line x1="225" y1="200" x2="268" y2="200" stroke="#9198a1" stroke-width="1.5"/>
+<polygon points="275,200 266,195 266,205" fill="#9198a1"/>
+<line x1="655" y1="94" x2="655" y2="200" stroke="#9198a1" stroke-width="1.5" stroke-dasharray="5 4"/>
+<line x1="655" y1="200" x2="612" y2="200" stroke="#9198a1" stroke-width="1.5" stroke-dasharray="5 4"/>
+<polygon points="605,200 614,195 614,205" fill="#9198a1"/>
+<line x1="360" y1="232" x2="360" y2="277" stroke="#9198a1" stroke-width="1.5"/>
+<polygon points="360,284 355,275 365,275" fill="#9198a1"/>
+<line x1="520" y1="232" x2="520" y2="277" stroke="#9198a1" stroke-width="1.5"/>
+<polygon points="520,284 515,275 525,275" fill="#9198a1"/>
+<text x="440" y="264" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" font-weight="400" text-anchor="middle" fill="#9198a1">uses</text>
+</svg>

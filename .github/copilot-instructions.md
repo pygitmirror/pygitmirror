@@ -86,6 +86,7 @@ Repository names and addresses will come from users of a web page.
 - Update every affected page in the same change: the guide pages in `docs/guide`, the README, and an "Unreleased" section in `docs/project/changelog.rst`, above the list of versions.
 - Rewrite and reorganize so that the docs read as one coherent guide. Do not append a section per change.
 - The table of what each operation does is in `docs/guide/operations.rst` and in the README; keep them equal.
+- The diagrams in `docs/_static` are drawn by `docs/scripts/make_images.py`, in a light and a dark variant. Change `docs/scripts/_images/diagrams.py` and run `make docs-images`; do not edit the SVG files. A diagram which shows what the operations do must be changed with the tables.
 - The docs build with warnings as errors.
 
 ## Git and releases

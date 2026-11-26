@@ -36,6 +36,16 @@ and a Python library with the same abilities.
        --destination gitea --destination-url https://git.example.com \
        --org my-org --all
 
+.. image:: /_static/overview-light.svg
+   :class: only-light
+   :width: 100%
+   :alt: The source is fetched into a local mirror, which is pushed to the destination; the APIs of the two hosts read and create the repositories
+
+.. image:: /_static/overview-dark.svg
+   :class: only-dark
+   :width: 100%
+   :alt: The source is fetched into a local mirror, which is pushed to the destination; the APIs of the two hosts read and create the repositories
+
 It does three things, which differ in what they may change at the
 destination:
 
