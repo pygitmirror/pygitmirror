@@ -123,6 +123,9 @@ An option given on the command line wins over the file. ``--org`` with
 A file with a key which is not in this table is rejected. There is no key
 for a token.
 
+Each repository is reported on one line. A failure is followed by a line
+which says what went wrong and what to do, where that is known.
+
 Exit status
 -----------
 

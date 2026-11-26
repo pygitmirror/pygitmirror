@@ -4,6 +4,10 @@
 [![Documentation](https://readthedocs.org/projects/pygitmirror/badge/?version=latest)](https://pygitmirror.readthedocs.io/)
 [![PyPI version](https://img.shields.io/pypi/v/pygitmirror)](https://pypi.org/project/pygitmirror/)
 [![Python versions](https://img.shields.io/pypi/pyversions/pygitmirror)](https://pypi.org/project/pygitmirror/)
+[![Weekly downloads](https://img.shields.io/pypi/dw/pygitmirror?label=downloads%2Fweek)](https://pypistats.org/packages/pygitmirror)
+[![Monthly downloads](https://img.shields.io/pypi/dm/pygitmirror?label=downloads%2Fmonth)](https://pypistats.org/packages/pygitmirror)
+[![Total downloads](https://img.shields.io/pepy/dt/pygitmirror?label=total%20downloads)](https://pepy.tech/projects/pygitmirror)
+[![Docker image](https://img.shields.io/badge/docker-ghcr.io%2Fpygitmirror%2Fpygitmirror-2496ed?logo=docker&logoColor=white)](https://github.com/pygitmirror/pygitmirror/pkgs/container/pygitmirror)
 [![License](https://img.shields.io/pypi/l/pygitmirror)](https://github.com/pygitmirror/pygitmirror/blob/master/LICENSE)
 
 Clone, sync and migrate git repositories between GitHub, GitLab, Gitea, Bitbucket and any other git server. A command, `git-mirror`, a page which runs on your own machine, and a Python library.
@@ -69,7 +73,13 @@ Only branches and tags are copied: not issues, pull requests, wikis, releases or
 git-mirror serve
 ```
 
-prints a link to a page on your own machine: choose two servers, list the repositories, preview, and run. Or with Docker:
+prints a link to a page on your own machine: choose two servers, list the repositories, preview, and run.
+
+![The page: a headline, and commits traveling from the source through the local mirror to the destination](https://raw.githubusercontent.com/pygitmirror/pygitmirror/master/docs/_static/page-hero-dark.png)
+
+![The results of a preview: figures of what would be created, updated and deleted, and one row per repository](https://raw.githubusercontent.com/pygitmirror/pygitmirror/master/docs/_static/page-results-dark.png)
+
+Or with Docker:
 
 ```shell
 docker run -d --name git-mirror \

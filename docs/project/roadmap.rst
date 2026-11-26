@@ -13,23 +13,20 @@ Now: the first version
 
 The first version copies between plain git servers, Gitea or Forgejo, and
 GitLab, in any combination. Each was run against a real server with
-tokens; the Gitea copy is repeated on every pull request. What is missing
-before it is released:
+tokens; the Gitea copy is repeated on every pull request. It is released,
+with the image in the GitHub registry. What is still missing from it:
 
-* **Errors a person can act on.** A repository which does not exist is
-  reported with the raw message of git. Say what is wrong and what to do
-  for the common cases: not found, not allowed, no space, diverged.
 * **Forgejo**, which shares the API: run the same check against it.
 * **Syncs to GitLab.** GitLab protects the default branch of a new
-  project, and refuses a sync which rewrites it. Let the destination allow
-  forced pushes when a sync asks for it, or say exactly what to change.
+  project, and refuses a sync which rewrites it. The failure now says
+  which setting to change; decide whether a sync may change it itself.
+* **The image on Docker Hub**, where people look for images and where
+  pulls are counted. It needs an account and a token of the maintainer.
 * **A repeatable check for GitLab**, as ``make check-gitea`` is for Gitea.
   It was run by hand; the server takes minutes to start, so it may run on
   a schedule instead of on every pull request.
 * **Git over SSH in the image.** It needs a key and the known hosts in
   the container; decide how they are given, and try it.
-* **Publish the image** with the next release, and add a picture of the
-  page to the README.
 
 Next: the page, a little further
 --------------------------------

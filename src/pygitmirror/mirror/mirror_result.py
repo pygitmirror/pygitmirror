@@ -4,6 +4,7 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from pygitmirror.errors import GitMirrorError
+from pygitmirror.mirror._advice import advise
 from pygitmirror.mirror.mirror_plan import MirrorPlan
 from pygitmirror.mirror.operation import Operation
 from pygitmirror.repository_ref import RepositoryRef
@@ -51,11 +52,21 @@ class MirrorResult:
             return False
         return bool(self.created or self.archived or self.plan.changes(prune=self.pruned))
 
+    @property
+    def advice(self) -> str | None:
+        """What went wrong and what to do, in plain words, for a failure.
+
+        ``None`` for a success, and for an error whose own message already
+        says it.
+        """
+        return None if self.error is None else advise(self.error)
+
     def to_dict(self) -> dict[str, Any]:
         """Return the result as plain data, for storing or sending it.
 
         :returns: the fields of the result, with the repositories as
-            ``owner/name``, the error as its message and the summary
+            ``owner/name``, the error as its message with the advice for
+            it, and the summary
         """
         return {
             "operation": self.operation.value,
@@ -69,6 +80,7 @@ class MirrorResult:
             "ok": self.ok,
             "changed": self.changed,
             "error": None if self.error is None else str(self.error),
+            "advice": self.advice,
             "summary": self.summary(),
         }
 

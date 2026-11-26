@@ -63,6 +63,8 @@ def _run(settings: Settings) -> int:
     failed = 0
     for result in results:
         _logger.log(logging.INFO if result.ok else logging.ERROR, "%s", result.summary())
+        if result.advice:
+            _logger.error("%s: %s", result.source, result.advice)
         failed += not result.ok
     _logger.info("%d of %d repositories failed", failed, len(repositories))
     return failed

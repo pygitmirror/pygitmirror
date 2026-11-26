@@ -19,7 +19,9 @@ tests.
    make install
 
 ``make install`` creates a virtual environment in ``.venv`` with the package
-and all development tools, exactly as pinned in ``uv.lock``.
+and all development tools, exactly as pinned in ``uv.lock``. The tools
+which build the documentation need Python 3.12 or newer; the package and
+its tests run on 3.11 as well.
 
 Make targets
 ------------

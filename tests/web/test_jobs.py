@@ -4,7 +4,7 @@ from typing import Any
 
 import pytest
 
-from pygitmirror import PlainHost
+from pygitmirror import ApiError, GiteaHost, PlainHost
 from pygitmirror.web import _forms
 from tests.helpers import Workshop, git, refs
 from tests.web.conftest import Client, body
@@ -68,7 +68,21 @@ def test_failures_are_reported_per_repository(
 ) -> None:
     job = _job(client, names=["missing", "repo"])
     assert [result["ok"] for result in job["results"]] == [False, True]
-    assert "does not appear to be a git repository" in job["results"][0]["error"]
+    failed = job["results"][0]
+    assert "does not appear to be a git repository" in failed["error"]
+    assert failed["advice"].startswith("There is no repository at")
+
+
+def test_a_failed_request_is_explained(client: Client, monkeypatch: pytest.MonkeyPatch) -> None:
+    def refuse(self: object, owner: str) -> None:
+        raise ApiError("GET http://x/orgs/org/repos answered 401: bad token", 401)
+
+    monkeypatch.setattr(GiteaHost, "list_repositories", refuse)
+    host = {"provider": "gitea", "url": "http://git.example.com", "token": "wrong"}
+    response = client.post("/api/repositories", {"host": host, "owner": "org"})
+    assert response.status == 400
+    assert body(response)["error"].startswith("The server did not accept the token")
+    assert "answered 401" in body(response)["details"]
 
 
 def test_copies_are_kept_or_deleted(

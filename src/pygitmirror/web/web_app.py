@@ -10,6 +10,7 @@ from pygitmirror.errors import GitMirrorError
 from pygitmirror.git import Git
 from pygitmirror.hosts import PROVIDERS
 from pygitmirror.mirror import Mirror, MirrorResult, Operation
+from pygitmirror.mirror._advice import advise
 from pygitmirror.web import _forms, _security, _storage
 from pygitmirror.web._static import static
 from pygitmirror.web.job_registry import JobRegistry
@@ -65,7 +66,11 @@ class WebApp:
         """
         try:
             response = self._route(request)
-        except (GitMirrorError, ValueError) as error:
+        except GitMirrorError as error:
+            # In plain words where there are some; what the server said goes along.
+            advice = advise(error)
+            response = Response.json({"error": advice or str(error), "details": str(error)}, 400)
+        except ValueError as error:
             response = Response.error(400, str(error))
         return _security.harden(response)
 

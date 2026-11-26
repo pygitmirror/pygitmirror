@@ -38,6 +38,17 @@ def test_config_reaches_git_through_the_environment(tmp_path: Path) -> None:
     assert output.strip() == "value"
 
 
+def test_git_speaks_english_whatever_the_language(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("LANG", "de_DE.UTF-8")
+    monkeypatch.setenv("LC_ALL", "de_DE.UTF-8")
+    monkeypatch.setenv("LANGUAGE", "de")
+    with pytest.raises(GitError) as raised:
+        Git().run("ls-remote", str(tmp_path / "missing"))
+    assert "does not appear to be a git repository" in raised.value.output
+
+
 def test_status(tmp_path: Path) -> None:
     git("init", "-q", cwd=tmp_path)
     assert Git().status("rev-parse", "--git-dir", cwd=tmp_path) == 0

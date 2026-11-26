@@ -5,6 +5,16 @@ The Page
 does in a terminal: choose two servers, name the repositories, preview, and
 run. It is for one person on their own machine.
 
+.. image:: /_static/page-hero-light.png
+   :class: only-light
+   :width: 100%
+   :alt: The top of the page: a headline, and commits traveling from the source through the local mirror to the destination
+
+.. image:: /_static/page-hero-dark.png
+   :class: only-dark
+   :width: 100%
+   :alt: The top of the page: a headline, and commits traveling from the source through the local mirror to the destination
+
 .. note::
 
    The page offers Gitea and Forgejo, GitLab, and plain git servers. The
@@ -138,6 +148,56 @@ Using it
 
 Results appear per repository as they finish. A repository which fails does
 not stop the others. One job runs at a time.
+
+.. image:: /_static/page-results-light.png
+   :class: only-light
+   :width: 100%
+   :alt: The results of a preview: how many branches and tags would be created, updated and deleted, and one row per repository
+
+.. image:: /_static/page-results-dark.png
+   :class: only-dark
+   :width: 100%
+   :alt: The results of a preview: how many branches and tags would be created, updated and deleted, and one row per repository
+
+When something fails
+--------------------
+
+A repository which fails says what went wrong and what to do, with what
+git or the server said behind "What the server said".
+
+.. list-table::
+   :header-rows: 1
+   :widths: 36 64
+
+   * - It says
+     - What to do
+   * - There is no repository at this address, or the token cannot see it
+     - check the owner and the name; a private repository needs a token
+       which may read it
+   * - The server did not accept the token
+     - check that the token is complete, has not expired, and was made on
+       this server
+   * - The token is not allowed to do this
+     - give it read access to the source and write access to the
+       destination; :doc:`hosts` lists what each host calls that
+   * - The owner does not exist
+     - create the user, organization or group at the destination; owners
+       are not created
+   * - The server protects this branch
+     - allow forced pushes for the branch at the destination, then sync
+       again; GitLab protects the default branch of new projects
+   * - The destination differs from the source
+     - the destination has commits the source does not have. Use sync to
+       overwrite them, or keep them and do not copy this repository
+   * - The disk of the local copies is full
+     - delete the local copies or free some space; see `Disk space`_
+   * - The server cannot be reached
+     - check the address; inside a container a server on your machine is
+       ``host.docker.internal``
+
+Nothing is half done by a failure before the push. A push which a server
+refuses part of the way can leave some branches copied; run it again once
+the cause is removed.
 
 What it protects, and what it does not
 --------------------------------------

@@ -70,7 +70,7 @@ The workflows in `.github/workflows` call make targets only. A step which needs 
 - **One public class per module**, named after it in snake case. Modules of helper functions without a public class start with an underscore, such as `_transfer.py`. Exceptions share `errors.py`.
 - Every public module, class, method and function has a docstring with Sphinx field lists (`:param name:`, `:returns:`, `:raises Error:`). Types are in the hints, not in the docstrings.
 - Mark an overriding method with `override` from `pygitmirror._compat`, which supports Python 3.11; it inherits the docstring.
-- Errors which the package reports derive from `GitMirrorError`.
+- Errors which the package reports derive from `GitMirrorError`. A failure a user can cause gets a sentence in `mirror/_advice.py` which says what to do, with a test which uses the real message.
 
 ## Rules for the page
 

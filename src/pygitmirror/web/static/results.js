@@ -27,15 +27,28 @@ function row(name, result) {
   if (result && result.destination !== result.source) {
     title.append(el("span", { class: "to", text: ` → ${result.destination}` }));
   }
-  // The summary starts with the operation and the names, which the row has.
-  const text = result ? result.summary.split(": ").slice(1).join(": ") : "";
-  return el(
+  const item = el(
     "li",
     { class: result && !result.ok ? "is-failed" : "" },
     title,
     el("span", { class: "pill", "data-tone": kind, text: word }),
-    el("span", { class: "row-text", text }),
   );
+  if (!result) return item;
+  if (result.ok) {
+    // The summary starts with the operation and the names, which the row has.
+    const text = result.summary.split(": ").slice(1).join(": ");
+    // "up to date" is on the pill already.
+    if (text !== word) item.append(el("span", { class: "row-text", text }));
+  } else if (result.advice) {
+    // What to do, with what git or the server said behind a click.
+    item.append(
+      el("span", { class: "row-text", text: result.advice }),
+      el("details", { class: "row-details" }, el("summary", { text: "What the server said" }), el("pre", { text: result.error })),
+    );
+  } else {
+    item.append(el("span", { class: "row-text", text: result.error }));
+  }
+  return item;
 }
 
 export function renderJob(job, dryRun) {
