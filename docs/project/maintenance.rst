@@ -42,6 +42,10 @@ git
   simply be moved forward.
 * ``GIT_ALLOW_PROTOCOL`` **applies to local paths**, as the ``file``
   protocol. The tests use local paths, so they need ``file`` allowed.
+* **git marks its object files read-only**, and Windows refuses to delete
+  a read-only file. ``remove_tree`` makes such a file writable first.
+  Deleting with errors ignored left the local mirrors in place on
+  Windows, which only the Windows jobs of CI showed.
 * **A bare repository lets its default branch be deleted** unless
   ``receive.denyDeleteCurrent`` is set. The hosts refuse, which the test of
   a renamed default branch imitates with that setting.

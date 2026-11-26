@@ -1,10 +1,10 @@
 """The local copy which data passes through on its way between two hosts."""
 
-import shutil
 from collections.abc import Mapping
 from pathlib import Path
 
 from pygitmirror.git._remote import MIRRORED, parse_refs
+from pygitmirror.git._remove import remove_tree
 from pygitmirror.git.git import Git
 
 _REFSPECS = tuple(f"{prefix}*:{prefix}*" for prefix in MIRRORED)
@@ -48,7 +48,7 @@ class LocalMirror:
         The next fetch downloads everything again.
         """
         if self.is_mirror(self._path):
-            shutil.rmtree(self._path, ignore_errors=True)
+            remove_tree(self._path)
 
     def fetch(self, url: str, config: Mapping[str, str] | None = None) -> None:
         """Make the branches and tags equal to those of a repository.

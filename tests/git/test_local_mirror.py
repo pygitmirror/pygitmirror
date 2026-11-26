@@ -1,3 +1,4 @@
+import stat
 from pathlib import Path
 
 import pytest
@@ -44,6 +45,22 @@ def test_is_ancestor(shop: Workshop, tmp_path: Path) -> None:
     assert mirror.is_ancestor(first, second)
     assert not mirror.is_ancestor(second, first)
     assert not mirror.is_ancestor("0" * 39 + "1", second)
+
+
+def test_delete_removes_read_only_files(shop: Workshop, tmp_path: Path) -> None:
+    mirror = LocalMirror(tmp_path / "mirror.git", Git())
+    mirror.fetch(str(shop.bare))
+    # As git does for its objects, which Windows then refuses to delete.
+    for path in mirror.path.rglob("*"):
+        if path.is_file():
+            path.chmod(stat.S_IREAD)
+    mirror.delete()
+    assert not mirror.path.exists()
+    mirror.delete()  # nothing to delete is not an error
+    other = tmp_path / "not-a-mirror"
+    other.mkdir()
+    LocalMirror(other, Git()).delete()
+    assert other.is_dir()
 
 
 def test_push(shop: Workshop, tmp_path: Path) -> None:

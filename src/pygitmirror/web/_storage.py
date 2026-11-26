@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Any
 
 from pygitmirror.git import LocalMirror
+from pygitmirror.git._remove import remove_tree
 
 
 def _mirrors(workdir: Path) -> list[Path]:
@@ -49,7 +50,7 @@ def clear(workdir: Path) -> int:
     """
     mirrors = _mirrors(workdir)
     for mirror in mirrors:
-        shutil.rmtree(mirror, ignore_errors=True)
+        remove_tree(mirror)
         # The folders of the owners, once they are empty.
         for parent in mirror.parents:
             if parent == workdir or workdir not in parent.parents:
