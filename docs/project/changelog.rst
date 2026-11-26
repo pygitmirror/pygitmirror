@@ -7,67 +7,11 @@ per minor version.
 Changes which are merged and not released yet are listed here, under a
 heading "Unreleased". At a release they move to the page of their version.
 
-Unreleased
-----------
-
-The package was rewritten. It does more, and some things differently; what
-existing users need to change is under "Changed".
-
-Added
-~~~~~
-
-* Three commands: ``git-mirror clone``, ``sync`` and ``migrate``. See
-  :doc:`/guide/operations`.
-* Hosts with an API: GitHub, GitLab, Gitea and Bitbucket. The destination
-  repository is created when it is missing, with the description and
-  visibility of the source, and ``--all`` copies every repository of an
-  owner. See :doc:`/guide/hosts`.
-* Tags are copied, not only branches.
-* ``--dry-run`` reports what would be done.
-* ``--destination-org`` and the ``owners`` setting copy to an owner of
-  another name.
-* Tokens from the environment, used for the API and for git over HTTPS.
-* A Python library: :doc:`/guide/library`.
-* This documentation.
-
-Changed
-~~~~~~~
-
-* **Python 3.11 or newer** is required, and git 2.31 or newer. GitPython is
-  no longer needed; the package has no dependencies.
-* **A run continues after a repository fails**, and the exit status is 1 if
-  one did. It used to stop at the first failure.
-* **Options win over the settings file.** It used to be the other way
-  around.
-* **The local mirror is a bare repository** in ``<owner>/<name>.git`` below
-  the sync path. The clones with a working tree which earlier versions
-  kept in ``<owner>/<name>`` are not used anymore and can be deleted.
-* A call without a command runs ``clone``. As before, it does not
-  overwrite; unlike before, a branch which diverged is reported before
-  anything is pushed, and tags are copied too.
-* A settings file which does not exist, or has an unknown key, is an
-  error. It used to be ignored.
-* The default log level is ``INFO``; it was ``DEBUG``.
-* ``--json`` is now ``--config``, and options are written with hyphens
-  (``--source-url``). The old spellings still work.
-
-Removed
-~~~~~~~
-
-* The modules ``pygitmirror.arguments`` and ``pygitmirror.sync``. Use
-  :class:`~pygitmirror.mirror.mirror.Mirror` instead.
-
-Project
-~~~~~~~
-
-* Development moved to ``uv``, ``ruff`` and ``mypy``, with a ``Makefile``
-  for the common tasks. See :doc:`development`.
-* The version is read from the git tag at build time.
-
 Versions
 --------
 
 .. toctree::
    :maxdepth: 1
 
+   changelog/0.1
    changelog/0.0
