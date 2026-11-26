@@ -1,41 +1,44 @@
 import importlib
-import os
-import warnings
+import subprocess
+import sys
+from pathlib import Path
 from pkgutil import walk_packages
-from typing import Tuple
 
 import pytest
 
-_dir = os.path.abspath(os.path.dirname(__file__))
+import pygitmirror
 
-ALL_PACKAGES = ["pygitmirror"]
-
-PROJECT_ROOT = os.path.abspath(
-    os.path.join(
-        _dir,
-        "..",
-    )
-)
+SOURCE = Path(__file__).parent.parent / "src" / "pygitmirror"
+MAX_LINES = 300
 
 
-def all_modules() -> Tuple[str, ...]:
-
-    def onerror(name: str) -> None:
-        warnings.warn(f"Failed to import {name} when expanding module_info fixture")
-
-    modules = [
-        w
-        for p in ALL_PACKAGES
-        for w in walk_packages(
-            [os.path.join(PROJECT_ROOT, "src", p)],
-            prefix=f"{p}.",
-            onerror=onerror,
-        )
-    ]
-
-    return tuple(m.name for m in modules)
+def all_modules() -> list[str]:
+    return [module.name for module in walk_packages([str(SOURCE)], prefix="pygitmirror.")]
 
 
 @pytest.mark.parametrize("module_name", all_modules())
 def test_loads(module_name: str) -> None:
     importlib.import_module(module_name)
+
+
+def test_exports_exist() -> None:
+    for name in pygitmirror.__all__:
+        assert hasattr(pygitmirror, name)
+    assert sorted(pygitmirror.__all__, key=str.lower) == sorted(
+        set(pygitmirror.__all__), key=str.lower
+    )
+
+
+def test_runs_as_a_module() -> None:
+    result = subprocess.run(
+        [sys.executable, "-m", "pygitmirror", "--version"],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    assert result.stdout.strip() == f"git-mirror {pygitmirror.__version__}"
+
+
+@pytest.mark.parametrize("path", sorted(SOURCE.rglob("*.py")), ids=lambda path: path.name)
+def test_files_stay_short(path: Path) -> None:
+    assert len(path.read_text(encoding="utf-8").splitlines()) < MAX_LINES

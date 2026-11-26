@@ -1,0 +1,19 @@
+version: 2
+updates:
+  # Versions of the actions used by the workflows.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    groups:
+      actions:
+        patterns: ["*"]
+
+  # Locked development dependencies in uv.lock.
+  - package-ecosystem: uv
+    directory: /
+    schedule:
+      interval: monthly
+    groups:
+      development:
+        patterns: ["*"]

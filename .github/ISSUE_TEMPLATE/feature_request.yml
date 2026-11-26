@@ -1,0 +1,16 @@
+name: Feature request
+description: A new host, operation or capability
+labels: [enhancement]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What would you like?
+      description: The host, operation or capability, and what you would use it for.
+    validations:
+      required: true
+  - type: textarea
+    id: reference
+    attributes:
+      label: References
+      description: The documentation of the API or of the git feature it needs, if any.

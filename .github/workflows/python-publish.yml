@@ -1,34 +1,43 @@
 name: Publish
 
 on:
-  page_build:
   release:
-    types: [created]
+    types: [published]
+
+# The job only reads the repository; what it needs beyond that is granted
+# to it below.
+permissions:
+  contents: read
 
 jobs:
-  deploy:
-    name: Deploy to pypi.org
+  build-and-publish:
+    name: Build and publish to PyPI
     runs-on: ubuntu-latest
 
-    environment: PYPIOrgToken
+    environment:
+      name: pypi
+      url: https://pypi.org/project/pygitmirror/
+
+    permissions:
+      contents: read
+      id-token: write # required for PyPI trusted publishing
 
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v3
+      - name: Check out the repository
+        uses: actions/checkout@v4
         with:
-          python-version: "3.x"
+          fetch-depth: 0 # the version is read from the git tags
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install .[dev]
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
 
-      - name: Build and publish
+      - name: Build the distributions
+        run: make build
+
+      - name: Check that the version matches the release tag
         env:
-          TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
-          TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
-        run: |
-          python -m build
-          twine upload dist/*
+          TAG: ${{ github.event.release.tag_name }}
+        run: make check-release TAG="$TAG"
+
+      - name: Publish to PyPI
+        run: make publish
